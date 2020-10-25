@@ -1,5 +1,10 @@
 # ci-info
 
+[![Build Status](https://github.com/suzuki-shunsuke/ci-info/workflows/CI/badge.svg)](https://github.com/suzuki-shunsuke/ci-info/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/suzuki-shunsuke/ci-info)](https://goreportcard.com/report/github.com/suzuki-shunsuke/ci-info)
+[![GitHub last commit](https://img.shields.io/github/last-commit/suzuki-shunsuke/ci-info.svg)](https://github.com/suzuki-shunsuke/ci-info)
+[![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/suzuki-shunsuke/ci-info/master/LICENSE)
+
 CLI tool to get CI related information.
 
 ## Motivation
