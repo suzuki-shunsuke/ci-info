@@ -9,3 +9,4 @@ linters:
   - nlreturn
   - godox
   - golint
+  - exhaustivestruct # https://github.com/mbilski/exhaustivestruct

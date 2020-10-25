@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"fmt"
+
 	"github.com/suzuki-shunsuke/ci-info/pkg/controller"
 	"github.com/urfave/cli/v2"
 )
@@ -39,7 +41,7 @@ func (runner Runner) action(c *cli.Context) error {
 
 	ctrl, params, err := controller.New(c.Context, params)
 	if err != nil {
-		return err
+		return fmt.Errorf("initialize a controller: %w", err)
 	}
 
 	return ctrl.Run(c.Context, params)
