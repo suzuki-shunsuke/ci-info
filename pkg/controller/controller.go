@@ -42,7 +42,7 @@ func (ctrl Controller) getPR(ctx context.Context, params Params) (*github.PullRe
 			SHA:   params.SHA,
 		})
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("list pull requests with a commit: %w", err)
 		}
 		logrus.WithFields(logrus.Fields{
 			"size": len(prs),
@@ -58,7 +58,7 @@ func (ctrl Controller) getPR(ctx context.Context, params Params) (*github.PullRe
 		PRNum: prNum,
 	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("get a pull request: %w", err)
 	}
 	return pr, nil
 }
@@ -95,7 +95,7 @@ func New(ctx context.Context, params Params) (Controller, Params, error) {
 		if params.PRNum <= 0 {
 			prNum, err := platform.PRNumber()
 			if err != nil {
-				return Controller{}, params, err
+				return Controller{}, params, fmt.Errorf("get the pull request number: %w", err)
 			}
 			params.PRNum = prNum
 		}
@@ -146,14 +146,14 @@ func (ctrl Controller) Run(ctx context.Context, params Params) error {
 		FileSize: pr.GetChangedFiles(),
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("get pull request files: %w", err)
 	}
 
 	dir := params.Dir
 	if dir == "" {
 		d, err := ioutil.TempDir("", "ci-info")
 		if err != nil {
-			return err
+			return fmt.Errorf("create a temporal directory: %w", err)
 		}
 		dir = d
 	}
@@ -189,7 +189,7 @@ func (ctrl Controller) writeLabelsTxt(p string, labels []*github.Label) error {
 	}
 	//nolint:gosec
 	if err := ioutil.WriteFile(p, []byte(txt), 0x755); err != nil {
-		return err
+		return fmt.Errorf("write a file "+p+": %w", err)
 	}
 	return nil
 }
@@ -205,7 +205,7 @@ func (ctrl Controller) writePRFilesTxt(p string, files []*github.CommitFile) err
 	}
 	//nolint:gosec
 	if err := ioutil.WriteFile(p, []byte(txt), 0x755); err != nil {
-		return err
+		return fmt.Errorf("write a file "+p+": %w", err)
 	}
 	return nil
 }
@@ -213,11 +213,11 @@ func (ctrl Controller) writePRFilesTxt(p string, files []*github.CommitFile) err
 func (ctrl Controller) writePRJSON(p string, pr *github.PullRequest) error {
 	prJSON, err := os.Create(p)
 	if err != nil {
-		return err
+		return fmt.Errorf("create a file "+p+": %w", err)
 	}
 	defer prJSON.Close()
 	if err := json.NewEncoder(prJSON).Encode(pr); err != nil {
-		return err
+		return fmt.Errorf("encode a pull request as JSON: %w", err)
 	}
 	return nil
 }
@@ -225,11 +225,11 @@ func (ctrl Controller) writePRJSON(p string, pr *github.PullRequest) error {
 func (ctrl Controller) writePRFilesJSON(p string, files []*github.CommitFile) error {
 	prFilesJSON, err := os.Create(p)
 	if err != nil {
-		return err
+		return fmt.Errorf("create a file "+p+": %w", err)
 	}
 	defer prFilesJSON.Close()
 	if err := json.NewEncoder(prFilesJSON).Encode(files); err != nil {
-		return err
+		return fmt.Errorf("encode a pull request files as JSON: %w", err)
 	}
 	return nil
 }
