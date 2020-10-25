@@ -136,6 +136,7 @@ func (ctrl Controller) Run(ctx context.Context, params Params) error {
 	}
 
 	if pr == nil {
+		fmt.Fprintln(ctrl.Stdout, "export "+params.Prefix+"IS_PR=false")
 		return nil
 	}
 
@@ -236,6 +237,7 @@ func (ctrl Controller) writePRFilesJSON(p string, files []*github.CommitFile) er
 
 func (ctrl Controller) printEnvs(prefix, dir string, pr *github.PullRequest) {
 	fmt.Fprintln(ctrl.Stdout, strings.Join([]string{
+		"export " + prefix + "IS_PR=true",
 		"export " + prefix + "PR_NUMBER=" + strconv.Itoa(pr.GetNumber()),
 		"export " + prefix + "BASE_REF=" + pr.GetBase().GetRef(),
 		"export " + prefix + "HEAD_REF=" + pr.GetHead().GetRef(),

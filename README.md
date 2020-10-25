@@ -38,6 +38,7 @@ Run the following command, which gets the information about https://github.com/s
 
 ```
 $ ci-info run --owner suzuki-shunsuke --repo github-comment --pr 132
+export CI_INFO_IS_PR=true
 export CI_INFO_PR_NUMBER=132
 export CI_INFO_BASE_REF=master
 export CI_INFO_HEAD_REF=feat/add-silent-option
