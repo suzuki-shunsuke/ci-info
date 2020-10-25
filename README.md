@@ -100,7 +100,7 @@ OPTIONS:
    --owner value         repository owner
    --repo value          repository name
    --sha value           commit SHA
-   --dir value           directory path where files are created. By default the directory is created at Go's ioutil.TempDir
+   --dir value           directory path where files are created. The directory is created by os.MkdirAll if it doesn't exist. By default the directory is created at Go's ioutil.TempDir
    --pr value            pull request number (default: 0)
    --github-token value  GitHub Access Token [$GITHUB_TOKEN, $GITHUB_ACCESS_TOKEN]
    --prefix value        The prefix of environment variable name (default: "CI_INFO_")
