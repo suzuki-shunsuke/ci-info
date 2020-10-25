@@ -117,7 +117,7 @@ var (
 	errSHAOrPRNumRequired  = errors.New("sha or pr number is required")
 )
 
-func (ctrl Controller) Run(ctx context.Context, params Params) error {
+func (ctrl Controller) validateParams(params Params) error {
 	if params.GitHubToken == "" {
 		return errGitHubTokenRequired
 	}
@@ -129,6 +129,13 @@ func (ctrl Controller) Run(ctx context.Context, params Params) error {
 	}
 	if params.PRNum <= 0 && params.SHA == "" {
 		return errSHAOrPRNumRequired
+	}
+	return nil
+}
+
+func (ctrl Controller) Run(ctx context.Context, params Params) error {
+	if err := ctrl.validateParams(params); err != nil {
+		return fmt.Errorf("argument is invalid: %w", err)
 	}
 	pr, err := ctrl.getPR(ctx, params)
 	if err != nil {
@@ -157,6 +164,10 @@ func (ctrl Controller) Run(ctx context.Context, params Params) error {
 			return fmt.Errorf("create a temporal directory: %w", err)
 		}
 		dir = d
+	} else { //nolint:gocritic
+		if err := os.MkdirAll(dir, 0x755); err != nil {
+			return fmt.Errorf("create a directory "+dir+": %w", err)
+		}
 	}
 
 	ctrl.printEnvs(params.Prefix, dir, pr)

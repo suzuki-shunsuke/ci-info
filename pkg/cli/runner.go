@@ -39,7 +39,7 @@ func (runner Runner) Run(ctx context.Context, args ...string) error {
 					},
 					&cli.StringFlag{
 						Name:  "dir",
-						Usage: "directory path where files are created. By default the directory is created at Go's ioutil.TempDir",
+						Usage: "directory path where files are created. The directory is created by os.MkdirAll if it doesn't exist. By default the directory is created at Go's ioutil.TempDir",
 					},
 					&cli.IntFlag{
 						Name:  "pr",
