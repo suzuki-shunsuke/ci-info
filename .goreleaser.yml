@@ -1,0 +1,12 @@
+---
+builds:
+- binary: ci-info
+  main: cmd/ci-info/main.go
+  env:
+  - CGO_ENABLED=0
+  goos:
+  - windows
+  - darwin
+  - linux
+  goarch:
+  - amd64
