@@ -137,13 +137,19 @@ func (ctrl Controller) Run(ctx context.Context, params Params) error {
 	if err := ctrl.validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
+
+	isPR := params.PRNum > 0
+
 	pr, err := ctrl.getPR(ctx, params)
 	if err != nil {
 		return err
 	}
 
 	if pr == nil {
-		fmt.Fprintln(ctrl.Stdout, "export "+params.Prefix+"IS_PR=false")
+		fmt.Fprintln(ctrl.Stdout, strings.Join([]string{
+			"export " + params.Prefix + "HAS_ASSOCIATED_PR=false",
+			"export " + params.Prefix + "IS_PR=false",
+		}, "\n"))
 		return nil
 	}
 
@@ -170,7 +176,7 @@ func (ctrl Controller) Run(ctx context.Context, params Params) error {
 		}
 	}
 
-	ctrl.printEnvs(params.Prefix, dir, pr)
+	ctrl.printEnvs(params.Prefix, dir, isPR, pr)
 
 	if err := ctrl.writePRFilesJSON(filepath.Join(dir, "pr_files.json"), files); err != nil {
 		return err
@@ -246,9 +252,10 @@ func (ctrl Controller) writePRFilesJSON(p string, files []*github.CommitFile) er
 	return nil
 }
 
-func (ctrl Controller) printEnvs(prefix, dir string, pr *github.PullRequest) {
+func (ctrl Controller) printEnvs(prefix, dir string, isPR bool, pr *github.PullRequest) {
 	fmt.Fprintln(ctrl.Stdout, strings.Join([]string{
-		"export " + prefix + "IS_PR=true",
+		"export " + prefix + "IS_PR=" + strconv.FormatBool(isPR),
+		"export " + prefix + "HAS_ASSOCIATED_PR=true",
 		"export " + prefix + "PR_NUMBER=" + strconv.Itoa(pr.GetNumber()),
 		"export " + prefix + "BASE_REF=" + pr.GetBase().GetRef(),
 		"export " + prefix + "HEAD_REF=" + pr.GetHead().GetRef(),
