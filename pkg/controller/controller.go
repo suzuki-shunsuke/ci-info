@@ -260,6 +260,7 @@ func (ctrl Controller) printEnvs(prefix, dir string, isPR bool, pr *github.PullR
 		"export " + prefix + "BASE_REF=" + pr.GetBase().GetRef(),
 		"export " + prefix + "HEAD_REF=" + pr.GetHead().GetRef(),
 		"export " + prefix + "PR_AUTHOR=" + pr.GetUser().GetLogin(),
+		"export " + prefix + "PR_MERGED=" + strconv.FormatBool(pr.GetMerged()),
 		"export " + prefix + "TEMP_DIR=" + dir,
 	}, "\n"))
 }
