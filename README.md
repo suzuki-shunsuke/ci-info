@@ -44,6 +44,7 @@ export CI_INFO_PR_NUMBER=132
 export CI_INFO_BASE_REF=master
 export CI_INFO_HEAD_REF=feat/add-silent-option
 export CI_INFO_PR_AUTHOR=suzuki-shunsuke
+export CI_INFO_PR_MERGED=true
 export CI_INFO_TEMP_DIR=/var/folders/w0/kzjzgvd52wg5s4jy5h0lcyqh0000gn/T/ci-info497729786
 ```
 
