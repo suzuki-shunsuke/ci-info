@@ -88,3 +88,7 @@ func (client Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) ([
 func (client Client) ListPRsWithCommit(ctx context.Context, params ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error) {
 	return client.Client.PullRequests.ListPullRequestsWithCommit(ctx, params.Owner, params.Repo, params.SHA, nil)
 }
+
+func (client Client) GetBranch(ctx context.Context, owner, repo, branch string) (*github.Branch, *github.Response, error) {
+	return client.Client.Repositories.GetBranch(ctx, owner, repo, branch)
+}

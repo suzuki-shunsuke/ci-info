@@ -37,15 +37,19 @@ GitHub Access Token is required to get the information about the Pull Request.
 Run the following command, which gets the information about https://github.com/suzuki-shunsuke/github-comment/pull/132 .
 
 ```
-$ ci-info run --owner suzuki-shunsuke --repo github-comment --pr 132
+$ ci-info run --owner suzuki-shunsuke --repo ci-info --pr 1
 export CI_INFO_IS_PR=true
 export CI_INFO_HAS_ASSOCIATED_PR=true
-export CI_INFO_PR_NUMBER=132
+export CI_INFO_PR_NUMBER=1
 export CI_INFO_BASE_REF=master
-export CI_INFO_HEAD_REF=feat/add-silent-option
+export CI_INFO_HEAD_REF=feat/first-pr
+export CI_INFO_BASE_SHA=78b60e74ef26a21e9b70695f72700932538cbbc7
+export CI_INFO_HEAD_SHA=eba51d69856f6df34cff0bc16b80d49eef0af25b
+export CI_INFO_HEAD_LATEST_SHA=
+export CI_INFO_BASE_LATEST_SHA=f05b22ea34e1bd720c25122e6ed110987c76175d
 export CI_INFO_PR_AUTHOR=suzuki-shunsuke
 export CI_INFO_PR_MERGED=true
-export CI_INFO_TEMP_DIR=/var/folders/w0/kzjzgvd52wg5s4jy5h0lcyqh0000gn/T/ci-info497729786
+export CI_INFO_TEMP_DIR=/var/folders/g5/s19ny0hd09g72v6pq5rbf54m0000gn/T/ci-info023742008
 ```
 
 Then the shell script to export the environment variables are outputted and some files are created.
