@@ -18,4 +18,5 @@ type GitHub interface {
 	GetPR(ctx context.Context, params gh.ParamsGetPR) (*github.PullRequest, *github.Response, error)
 	GetPRFiles(ctx context.Context, params gh.ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error)
 	ListPRsWithCommit(ctx context.Context, params gh.ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error)
+	GetBranch(ctx context.Context, owner, repo, branch string) (*github.Branch, *github.Response, error)
 }

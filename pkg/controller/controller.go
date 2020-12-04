@@ -133,7 +133,7 @@ func (ctrl Controller) validateParams(params Params) error {
 	return nil
 }
 
-func (ctrl Controller) Run(ctx context.Context, params Params) error {
+func (ctrl Controller) Run(ctx context.Context, params Params) error { //nolint:funlen
 	if err := ctrl.validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
@@ -176,7 +176,16 @@ func (ctrl Controller) Run(ctx context.Context, params Params) error {
 		}
 	}
 
-	ctrl.printEnvs(params.Prefix, dir, isPR, pr)
+	headBranch, _, err := ctrl.GitHub.GetBranch(ctx, params.Owner, params.Repo, pr.Head.GetRef())
+	if err != nil {
+		return fmt.Errorf("get a head branch: %w", err)
+	}
+	baseBranch, _, err := ctrl.GitHub.GetBranch(ctx, params.Owner, params.Repo, pr.Base.GetRef())
+	if err != nil {
+		return fmt.Errorf("get a base branch: %w", err)
+	}
+
+	ctrl.printEnvs(params.Prefix, dir, isPR, pr, headBranch, baseBranch)
 
 	if err := ctrl.writePRFilesJSON(filepath.Join(dir, "pr_files.json"), files); err != nil {
 		return err
@@ -252,13 +261,17 @@ func (ctrl Controller) writePRFilesJSON(p string, files []*github.CommitFile) er
 	return nil
 }
 
-func (ctrl Controller) printEnvs(prefix, dir string, isPR bool, pr *github.PullRequest) {
+func (ctrl Controller) printEnvs(prefix, dir string, isPR bool, pr *github.PullRequest, headBranch, baseBranch *github.Branch) {
 	fmt.Fprintln(ctrl.Stdout, strings.Join([]string{
 		"export " + prefix + "IS_PR=" + strconv.FormatBool(isPR),
 		"export " + prefix + "HAS_ASSOCIATED_PR=true",
 		"export " + prefix + "PR_NUMBER=" + strconv.Itoa(pr.GetNumber()),
 		"export " + prefix + "BASE_REF=" + pr.GetBase().GetRef(),
 		"export " + prefix + "HEAD_REF=" + pr.GetHead().GetRef(),
+		"export " + prefix + "BASE_SHA=" + pr.GetBase().GetSHA(),
+		"export " + prefix + "HEAD_SHA=" + pr.GetHead().GetSHA(),
+		"export " + prefix + "HEAD_LATEST_SHA=" + headBranch.GetCommit().GetSHA(),
+		"export " + prefix + "BASE_LATEST_SHA=" + baseBranch.GetCommit().GetSHA(),
 		"export " + prefix + "PR_AUTHOR=" + pr.GetUser().GetLogin(),
 		"export " + prefix + "PR_MERGED=" + strconv.FormatBool(pr.GetMerged()),
 		"export " + prefix + "TEMP_DIR=" + dir,
