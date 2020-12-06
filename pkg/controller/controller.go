@@ -133,7 +133,7 @@ func (ctrl Controller) validateParams(params Params) error {
 	return nil
 }
 
-func (ctrl Controller) Run(ctx context.Context, params Params) error {
+func (ctrl Controller) Run(ctx context.Context, params Params) error { //nolint:funlen
 	if err := ctrl.validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
@@ -149,6 +149,8 @@ func (ctrl Controller) Run(ctx context.Context, params Params) error {
 		fmt.Fprintln(ctrl.Stdout, strings.Join([]string{
 			"export " + params.Prefix + "HAS_ASSOCIATED_PR=false",
 			"export " + params.Prefix + "IS_PR=false",
+			"export " + params.Prefix + "REPO_OWNER=" + params.Owner,
+			"export " + params.Prefix + "REPO_NAME=" + params.Repo,
 		}, "\n"))
 		return nil
 	}
@@ -176,7 +178,7 @@ func (ctrl Controller) Run(ctx context.Context, params Params) error {
 		}
 	}
 
-	ctrl.printEnvs(params.Prefix, dir, isPR, pr)
+	ctrl.printEnvs(params.Prefix, dir, isPR, params.Owner, params.Repo, pr)
 
 	if err := ctrl.writePRFilesJSON(filepath.Join(dir, "pr_files.json"), files); err != nil {
 		return err
@@ -252,7 +254,7 @@ func (ctrl Controller) writePRFilesJSON(p string, files []*github.CommitFile) er
 	return nil
 }
 
-func (ctrl Controller) printEnvs(prefix, dir string, isPR bool, pr *github.PullRequest) {
+func (ctrl Controller) printEnvs(prefix, dir string, isPR bool, owner, repo string, pr *github.PullRequest) {
 	fmt.Fprintln(ctrl.Stdout, strings.Join([]string{
 		"export " + prefix + "IS_PR=" + strconv.FormatBool(isPR),
 		"export " + prefix + "HAS_ASSOCIATED_PR=true",
@@ -262,5 +264,7 @@ func (ctrl Controller) printEnvs(prefix, dir string, isPR bool, pr *github.PullR
 		"export " + prefix + "PR_AUTHOR=" + pr.GetUser().GetLogin(),
 		"export " + prefix + "PR_MERGED=" + strconv.FormatBool(pr.GetMerged()),
 		"export " + prefix + "TEMP_DIR=" + dir,
+		"export " + prefix + "REPO_OWNER=" + owner,
+		"export " + prefix + "REPO_NAME=" + repo,
 	}, "\n"))
 }
