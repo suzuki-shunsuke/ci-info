@@ -64,6 +64,7 @@ $ ls "$CI_INFO_TEMP_DIR"
 ```
 
 * pr_files.txt: The list of pull request file paths which include a maximum of 3000 files
+* pr_all_filenames.txt: The list of pull request file paths which include a maximum of 3000 files. In addition to `pr_files.txt`, the list of renamed file's `previous_filename` is included too.
 * pr_files.json: [The response body of GitHub API List pull requests files](https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#list-pull-requests-files)
 * pr.json: [The response body of GitHub API Get a pull request](https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#get-a-pull-request)
 * labels.txt: The list of pull request label names
