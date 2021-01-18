@@ -75,6 +75,10 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 		return err
 	}
 
+	if err := ctrl.writePRChangedFilesTxt(filepath.Join(dir, "pr_all_filenames.txt"), files); err != nil {
+		return err
+	}
+
 	if err := ctrl.writeLabelsTxt(filepath.Join(dir, "labels.txt"), pr.Labels); err != nil {
 		return err
 	}
@@ -163,6 +167,30 @@ func (ctrl *Controller) writePRFilesTxt(p string, files []*github.CommitFile) er
 	txt := ""
 	if len(prFileNames) != 0 {
 		txt = strings.Join(prFileNames, "\n") + "\n"
+	}
+	//nolint:gosec
+	if err := ioutil.WriteFile(p, []byte(txt), 0x755); err != nil {
+		return fmt.Errorf("write a file "+p+": %w", err)
+	}
+	return nil
+}
+
+func (ctrl *Controller) writePRChangedFilesTxt(p string, files []*github.CommitFile) error {
+	prFileNames := make(map[string]struct{}, len(files))
+	for _, file := range files {
+		prFileNames[file.GetFilename()] = struct{}{}
+		prevFileName := file.GetPreviousFilename()
+		if prevFileName != "" {
+			prFileNames[prevFileName] = struct{}{}
+		}
+	}
+	arr := make([]string, 0, len(prFileNames))
+	for k := range prFileNames {
+		arr = append(arr, k)
+	}
+	txt := ""
+	if len(prFileNames) != 0 {
+		txt = strings.Join(arr, "\n") + "\n"
 	}
 	//nolint:gosec
 	if err := ioutil.WriteFile(p, []byte(txt), 0x755); err != nil {
