@@ -44,17 +44,17 @@ type ParamsListPRsWithCommit struct {
 	SHA   string
 }
 
-func (client Client) GetPR(ctx context.Context, params ParamsGetPR) (*github.PullRequest, *github.Response, error) {
+func (client *Client) GetPR(ctx context.Context, params ParamsGetPR) (*github.PullRequest, *github.Response, error) {
 	return client.Client.PullRequests.Get(ctx, params.Owner, params.Repo, params.PRNum)
 }
 
-func (client Client) getPRFiles(ctx context.Context, params ParamsGetPRFiles, opts *github.ListOptions) ([]*github.CommitFile, *github.Response, error) {
+func (client *Client) getPRFiles(ctx context.Context, params ParamsGetPRFiles, opts *github.ListOptions) ([]*github.CommitFile, *github.Response, error) {
 	return client.Client.PullRequests.ListFiles(ctx, params.Owner, params.Repo, params.PRNum, opts)
 }
 
 const maxPerPage = 100
 
-func (client Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error) {
+func (client *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error) {
 	ret := []*github.CommitFile{}
 	if params.FileSize == 0 {
 		logrus.Debug("file size is 0")
@@ -85,6 +85,6 @@ func (client Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) ([
 	return ret, gResp, nil
 }
 
-func (client Client) ListPRsWithCommit(ctx context.Context, params ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error) {
+func (client *Client) ListPRsWithCommit(ctx context.Context, params ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error) {
 	return client.Client.PullRequests.ListPullRequestsWithCommit(ctx, params.Owner, params.Repo, params.SHA, nil)
 }

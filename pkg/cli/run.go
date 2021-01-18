@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-func (runner Runner) setCLIArg(c *cli.Context, params controller.Params) controller.Params {
+func (runner *Runner) setCLIArg(c *cli.Context, params controller.Params) controller.Params {
 	if owner := c.String("owner"); owner != "" {
 		params.Owner = owner
 	}
@@ -35,7 +35,7 @@ func (runner Runner) setCLIArg(c *cli.Context, params controller.Params) control
 	return params
 }
 
-func (runner Runner) action(c *cli.Context) error {
+func (runner *Runner) action(c *cli.Context) error {
 	params := controller.Params{}
 	params = runner.setCLIArg(c, params)
 

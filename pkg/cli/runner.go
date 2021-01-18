@@ -14,7 +14,7 @@ type Runner struct {
 	Stderr io.Writer
 }
 
-func (runner Runner) Run(ctx context.Context, args ...string) error {
+func (runner *Runner) Run(ctx context.Context, args ...string) error {
 	app := cli.App{
 		Name:    "ci-info",
 		Usage:   "get CI information. https://github.com/suzuki-shunsuke/ci-info",
