@@ -56,7 +56,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 		}
 		dir = d
 	} else { //nolint:gocritic
-		if err := os.MkdirAll(dir, 0x755); err != nil {
+		if err := os.MkdirAll(dir, 0755); err != nil {
 			return fmt.Errorf("create a directory "+dir+": %w", err)
 		}
 	}
@@ -152,11 +152,7 @@ func (ctrl *Controller) writeLabelsTxt(p string, labels []*github.Label) error {
 	if len(labelNames) != 0 {
 		txt = strings.Join(labelNames, "\n") + "\n"
 	}
-	//nolint:gosec
-	if err := ioutil.WriteFile(p, []byte(txt), 0x755); err != nil {
-		return fmt.Errorf("write a file "+p+": %w", err)
-	}
-	return nil
+	return ctrl.writeFile(p, []byte(txt))
 }
 
 func (ctrl *Controller) writePRFilesTxt(p string, files []*github.CommitFile) error {
@@ -168,8 +164,16 @@ func (ctrl *Controller) writePRFilesTxt(p string, files []*github.CommitFile) er
 	if len(prFileNames) != 0 {
 		txt = strings.Join(prFileNames, "\n") + "\n"
 	}
-	//nolint:gosec
-	if err := ioutil.WriteFile(p, []byte(txt), 0x755); err != nil {
+	return ctrl.writeFile(p, []byte(txt))
+}
+
+func (ctrl *Controller) writeFile(p string, data []byte) error {
+	file, err := os.Create(p)
+	if err != nil {
+		return fmt.Errorf("create a file "+p+": %w", err)
+	}
+	defer file.Close()
+	if _, err := file.Write(data); err != nil {
 		return fmt.Errorf("write a file "+p+": %w", err)
 	}
 	return nil
@@ -192,11 +196,7 @@ func (ctrl *Controller) writePRChangedFilesTxt(p string, files []*github.CommitF
 	if len(prFileNames) != 0 {
 		txt = strings.Join(arr, "\n") + "\n"
 	}
-	//nolint:gosec
-	if err := ioutil.WriteFile(p, []byte(txt), 0x755); err != nil {
-		return fmt.Errorf("write a file "+p+": %w", err)
-	}
-	return nil
+	return ctrl.writeFile(p, []byte(txt))
 }
 
 func (ctrl *Controller) writePRJSON(p string, pr *github.PullRequest) error {
