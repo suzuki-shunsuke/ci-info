@@ -49,13 +49,20 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 	}
 
 	dir := params.Dir
-	if dir == "" {
+	if dir == "" { //nolint:nestif
 		d, err := ioutil.TempDir("", "ci-info")
 		if err != nil {
 			return fmt.Errorf("create a temporal directory: %w", err)
 		}
 		dir = d
-	} else { //nolint:gocritic
+	} else {
+		if !filepath.IsAbs(dir) {
+			if d, err := filepath.Abs(dir); err != nil {
+				return fmt.Errorf("convert -dir %s to absolute path: %w", dir, err)
+			} else {
+				dir = d
+			}
+		}
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			return fmt.Errorf("create a directory "+dir+": %w", err)
 		}
