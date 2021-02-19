@@ -56,7 +56,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 		}
 		dir = d
 	} else { //nolint:gocritic
-		if err := os.MkdirAll(dir, 0x755); err != nil {
+		if err := os.MkdirAll(dir, 0755); err != nil {
 			return fmt.Errorf("create a directory "+dir+": %w", err)
 		}
 	}
