@@ -61,15 +61,11 @@ func (client *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) (
 		return nil, nil, nil
 	}
 	n := (params.FileSize / maxPerPage) + 1
-	lastPerPage := params.FileSize % maxPerPage
 	var gResp *github.Response
 	for i := 1; i <= n; i++ {
 		opts := &github.ListOptions{
 			Page:    i,
 			PerPage: maxPerPage,
-		}
-		if i == n {
-			opts.PerPage = lastPerPage
 		}
 		files, resp, err := client.getPRFiles(ctx, params, opts)
 		if err != nil {
