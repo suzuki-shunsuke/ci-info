@@ -16,7 +16,7 @@ import (
 	gh "github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
-func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint:funlen
+func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint:funlen,cyclop
 	if err := ctrl.validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
@@ -57,11 +57,11 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 		dir = d
 	} else {
 		if !filepath.IsAbs(dir) {
-			if d, err := filepath.Abs(dir); err != nil {
+			d, err := filepath.Abs(dir)
+			if err != nil {
 				return fmt.Errorf("convert -dir %s to absolute path: %w", dir, err)
-			} else {
-				dir = d
 			}
+			dir = d
 		}
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			return fmt.Errorf("create a directory "+dir+": %w", err)
@@ -87,7 +87,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 	}
 
 	if err := ctrl.writeLabelsTxt(filepath.Join(dir, "labels.txt"), pr.Labels); err != nil {
-		return err
+		return fmt.Errorf("write labels.txt: %w", err)
 	}
 	return nil
 }

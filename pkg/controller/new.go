@@ -35,7 +35,7 @@ type Controller struct {
 	Stderr io.Writer
 }
 
-func New(ctx context.Context, params Params) (Controller, Params, error) {
+func New(ctx context.Context, params Params) (Controller, Params, error) { //nolint:cyclop
 	if params.LogLevel != "" {
 		lvl, err := logrus.ParseLevel(params.LogLevel)
 		if err != nil {
