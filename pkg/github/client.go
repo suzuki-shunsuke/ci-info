@@ -45,11 +45,11 @@ type ParamsListPRsWithCommit struct {
 }
 
 func (client *Client) GetPR(ctx context.Context, params ParamsGetPR) (*github.PullRequest, *github.Response, error) {
-	return client.Client.PullRequests.Get(ctx, params.Owner, params.Repo, params.PRNum)
+	return client.Client.PullRequests.Get(ctx, params.Owner, params.Repo, params.PRNum) //nolint:wrapcheck
 }
 
 func (client *Client) getPRFiles(ctx context.Context, params ParamsGetPRFiles, opts *github.ListOptions) ([]*github.CommitFile, *github.Response, error) {
-	return client.Client.PullRequests.ListFiles(ctx, params.Owner, params.Repo, params.PRNum, opts)
+	return client.Client.PullRequests.ListFiles(ctx, params.Owner, params.Repo, params.PRNum, opts) //nolint:wrapcheck
 }
 
 const maxPerPage = 100
@@ -82,5 +82,5 @@ func (client *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) (
 }
 
 func (client *Client) ListPRsWithCommit(ctx context.Context, params ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error) {
-	return client.Client.PullRequests.ListPullRequestsWithCommit(ctx, params.Owner, params.Repo, params.SHA, nil)
+	return client.Client.PullRequests.ListPullRequestsWithCommit(ctx, params.Owner, params.Repo, params.SHA, nil) //nolint:wrapcheck
 }

@@ -13,9 +13,9 @@ jobs:
     - run: go mod download
 
     - name: golangci-lint
-      run: |
-        bash ci/install-golangci-lint.sh
-        golangci-lint run
+      uses: golangci/golangci-lint-action@v2
+      with:
+        version: v1.39
 
     - name: remove changes
       # Sometimes it is failed to release by goreleaser due to changes of go.sum

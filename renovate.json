@@ -1,13 +1,5 @@
 {
   "extends": [
     "github>suzuki-shunsuke/renovate-config:golang"
-  ],
-  "regexManagers": [
-    {
-      "fileMatch": ["ci/install-golangci-lint\\.sh"],
-      "matchStrings": ["GOLANGCI_LINT_VERSION=(?<currentValue>.*?)\\n"],
-      "depNameTemplate": "golangci/golangci-lint",
-      "datasourceTemplate": "github-releases"
-    }
   ]
 }
