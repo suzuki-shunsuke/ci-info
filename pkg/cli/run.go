@@ -32,6 +32,8 @@ func (runner *Runner) setCLIArg(c *cli.Context, params controller.Params) contro
 	if prNum := c.Int("pr"); prNum > 0 {
 		params.PRNum = prNum
 	}
+	params.WaitMergeable = c.Bool("wait-mergeable")
+	params.WaitMergeableTimeout = c.Int("wait-mergeable-timeout")
 	return params
 }
 

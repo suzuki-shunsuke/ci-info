@@ -13,14 +13,16 @@ import (
 )
 
 type Params struct {
-	Owner       string
-	Repo        string
-	SHA         string
-	Dir         string
-	PRNum       int
-	GitHubToken string
-	LogLevel    string
-	Prefix      string
+	Owner                string
+	Repo                 string
+	SHA                  string
+	Dir                  string
+	GitHubToken          string
+	LogLevel             string
+	Prefix               string
+	PRNum                int
+	WaitMergeableTimeout int
+	WaitMergeable        bool
 }
 
 type GitHub interface {
