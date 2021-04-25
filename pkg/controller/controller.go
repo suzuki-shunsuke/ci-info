@@ -93,7 +93,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 	return nil
 }
 
-func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullRequest, error) {
+func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullRequest, error) { //nolint:cyclop
 	prNum := params.PRNum
 	if prNum <= 0 {
 		logrus.WithFields(logrus.Fields{
