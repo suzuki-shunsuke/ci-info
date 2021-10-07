@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/google/go-github/v35/github"
+	"github.com/google/go-github/v39/github"
 	"github.com/sirupsen/logrus"
 	gh "github.com/suzuki-shunsuke/ci-info/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/cienv"
