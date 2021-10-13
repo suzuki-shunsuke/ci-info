@@ -3,7 +3,7 @@ module github.com/suzuki-shunsuke/ci-info
 go 1.15
 
 require (
-	github.com/google/go-github/v39 v39.1.0
+	github.com/google/go-github/v39 v39.2.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/suzuki-shunsuke/go-ci-env v1.1.0
 	github.com/urfave/cli/v2 v2.3.0
