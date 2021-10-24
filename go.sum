@@ -129,8 +129,8 @@ github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.4.0 h1:2E4SXV/wtOkTonXsotYi4li6zVWxYlZuYNCXe9XRJyk=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
-github.com/suzuki-shunsuke/go-ci-env v1.1.0 h1:eGpItM2bEDtHFXYYEm8zz+kDGxWlhOtwNK58cREa1QU=
-github.com/suzuki-shunsuke/go-ci-env v1.1.0/go.mod h1:kO9UgcQIAH4Pu4ESkUJHPuQEtesxHPKkpQqeJHJzzdk=
+github.com/suzuki-shunsuke/go-ci-env/v2 v2.0.1 h1:O1TiyKcfABEi2XmTyqEssZLU+Pkq6NYvvYxiGxhTrRo=
+github.com/suzuki-shunsuke/go-ci-env/v2 v2.0.1/go.mod h1:/C2DMGRQdbN8GoIbptoRkUjOzn1KCM/uw1ckjhFB8cA=
 github.com/urfave/cli/v2 v2.3.0 h1:qph92Y649prgesehzOrQjdWyxFOp/QVM+6imKHad91M=
 github.com/urfave/cli/v2 v2.3.0/go.mod h1:LJmUH05zAU44vOAcrfzZQKsZbVcdbOG8rtL3/XcUArI=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

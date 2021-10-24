@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-github/v39/github"
 	"github.com/sirupsen/logrus"
 	gh "github.com/suzuki-shunsuke/ci-info/pkg/github"
-	"github.com/suzuki-shunsuke/go-ci-env/cienv"
+	"github.com/suzuki-shunsuke/go-ci-env/v2/cienv"
 )
 
 type Params struct {
