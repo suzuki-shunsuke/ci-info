@@ -20,6 +20,14 @@ jobs:
       with:
         version: v1.39
 
+    - name: Generate token
+      id: generate_token
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: tibdex/github-app-token@v1
+      with:
+        app_id: ${{ secrets.APP_ID }}
+        private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
     - name: remove changes
       # Sometimes it is failed to release by goreleaser due to changes of go.sum
       run: git checkout -- .
@@ -35,6 +43,7 @@ jobs:
         args: release --rm-dist
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        HOMEBREW_TAP_GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
     - name: Run GoReleaser (skip publish)
       uses: goreleaser/goreleaser-action@v2
       if: "! startsWith(github.ref, 'refs/tags/')"
