@@ -21,7 +21,12 @@ We develop this tool to get some information in CI.
 
 ## Install
 
-Download from [GitHub Releases](https://github.com/suzuki-shunsuke/ci-info/releases)
+Download from [GitHub Releases](https://github.com/suzuki-shunsuke/ci-info/releases).
+You can install ci-info with [Homebrew](https://brew.sh/) too.
+
+```
+$ brew install suzuki-shunsuke/ci-info/ci-info
+```
 
 ```
 $ ci-info --version
