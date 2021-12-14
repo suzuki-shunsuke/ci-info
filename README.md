@@ -24,14 +24,11 @@ We develop this tool to get some information in CI.
 Download from [GitHub Releases](https://github.com/suzuki-shunsuke/ci-info/releases).
 You can install ci-info with [Homebrew](https://brew.sh/) too.
 
-```
+```console
 $ brew install suzuki-shunsuke/ci-info/ci-info
 ```
 
-```
-$ ci-info --version
-ci-info version 0.1.0
-```
+You can install ci-info with [aqua](https://aquaproj.github.io/) too.
 
 ## Requirements
 
@@ -41,7 +38,7 @@ GitHub Access Token is required to get the information about the Pull Request.
 
 Run the following command, which gets the information about https://github.com/suzuki-shunsuke/github-comment/pull/132 .
 
-```
+```console
 $ ci-info run --owner suzuki-shunsuke --repo github-comment --pr 132
 export CI_INFO_IS_PR=true
 export CI_INFO_HAS_ASSOCIATED_PR=true
@@ -78,7 +75,7 @@ Note that the created directory and files aren't removed automatically.
 
 ## Usage
 
-```
+```console
 $ ci-info help
 NAME:
    ci-info - get CI information. https://github.com/suzuki-shunsuke/ci-info
@@ -98,7 +95,7 @@ GLOBAL OPTIONS:
    --version, -v  print the version (default: false)
 ```
 
-```
+```console
 $ ci-info run --help
 NAME:
    ci-info run - get CI information
