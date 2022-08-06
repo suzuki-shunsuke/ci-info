@@ -128,16 +128,12 @@ func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullR
 }
 
 var (
-	errGitHubTokenRequired = errors.New("GitHub Access Token is required")
-	errOwnerRequired       = errors.New("owner is required")
-	errRepoRequired        = errors.New("repo is required")
-	errSHAOrPRNumRequired  = errors.New("sha or pr number is required")
+	errOwnerRequired      = errors.New("owner is required")
+	errRepoRequired       = errors.New("repo is required")
+	errSHAOrPRNumRequired = errors.New("sha or pr number is required")
 )
 
 func (ctrl *Controller) validateParams(params Params) error {
-	if params.GitHubToken == "" {
-		return errGitHubTokenRequired
-	}
 	if params.Owner == "" {
 		return errOwnerRequired
 	}

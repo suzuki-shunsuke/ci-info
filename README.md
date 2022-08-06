@@ -33,6 +33,7 @@ You can install ci-info with [aqua](https://aquaproj.github.io/) too.
 ## Requirements
 
 GitHub Access Token is required to get the information about the Pull Request.
+In the public repository, GitHub Access Token is optional.
 
 ## Getting Started
 

@@ -2,6 +2,7 @@ package github
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/google/go-github/v39/github"
 	"github.com/sirupsen/logrus"
@@ -17,11 +18,15 @@ type ParamsNew struct {
 }
 
 func New(ctx context.Context, params ParamsNew) Client {
-	tc := oauth2.NewClient(ctx, oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: params.Token},
-	))
+	if params.Token == "" {
+		return Client{
+			Client: github.NewClient(http.DefaultClient),
+		}
+	}
 	return Client{
-		Client: github.NewClient(tc),
+		Client: github.NewClient(oauth2.NewClient(ctx, oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: params.Token},
+		))),
 	}
 }
 
