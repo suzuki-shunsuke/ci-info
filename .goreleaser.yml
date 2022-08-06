@@ -10,10 +10,13 @@ builds:
   - linux
   goarch:
   - amd64
+  - arm64
 release:
   # We update release page manually before releasing
   # So make prerelease true
   prerelease: true
+  header: |
+    [Pull Requests](https://github.com/suzuki-shunsuke/ci-info/pulls?q=is%3Apr+milestone%3A{{.Tag}}) | [Issues](https://github.com/suzuki-shunsuke/ci-info/issues?q=is%3Aissue+milestone%3A{{.Tag}}) | https://github.com/suzuki-shunsuke/ci-info/compare/{{.PreviousTag}}...{{.Tag}}
 brews:
 -
   # NOTE: make sure the url_template, the token and given repo (github or gitlab) owner and name are from the
