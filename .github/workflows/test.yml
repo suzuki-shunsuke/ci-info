@@ -32,7 +32,7 @@ jobs:
       # Sometimes it is failed to release by goreleaser due to changes of go.sum
       run: git checkout -- .
     - name: Run GoReleaser
-      uses: goreleaser/goreleaser-action@b508e2e3ef3b19d4e4146d4f8fb3ba9db644a757 # tag=v3.2.0
+      uses: goreleaser/goreleaser-action@8f67e590f2d095516493f017008adc464e63adb1 # v4.1.0
       if: startsWith(github.ref, 'refs/tags/')
       with:
         version: latest
@@ -41,7 +41,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         HOMEBREW_TAP_GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
     - name: Run GoReleaser (skip publish)
-      uses: goreleaser/goreleaser-action@b508e2e3ef3b19d4e4146d4f8fb3ba9db644a757 # tag=v3.2.0
+      uses: goreleaser/goreleaser-action@8f67e590f2d095516493f017008adc464e63adb1 # v4.1.0
       if: "! startsWith(github.ref, 'refs/tags/')"
       with:
         version: latest
