@@ -10,9 +10,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/google/go-github/v39/github"
 	"github.com/sirupsen/logrus"
-	gh "github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
 func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint:funlen,cyclop
@@ -37,7 +36,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 		return nil
 	}
 
-	files, _, err := ctrl.GitHub.GetPRFiles(ctx, gh.ParamsGetPRFiles{
+	files, _, err := ctrl.GitHub.GetPRFiles(ctx, github.ParamsGetPRFiles{
 		Owner:    params.Owner,
 		Repo:     params.Repo,
 		PRNum:    pr.GetNumber(),
@@ -99,7 +98,7 @@ func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullR
 			"repo":  params.Repo,
 			"sha":   params.SHA,
 		}).Debug("get pull request from SHA")
-		prs, _, err := ctrl.GitHub.ListPRsWithCommit(ctx, gh.ParamsListPRsWithCommit{
+		prs, _, err := ctrl.GitHub.ListPRsWithCommit(ctx, github.ParamsListPRsWithCommit{
 			Owner: params.Owner,
 			Repo:  params.Repo,
 			SHA:   params.SHA,
@@ -115,7 +114,7 @@ func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullR
 		}
 		prNum = prs[0].GetNumber()
 	}
-	pr, _, err := ctrl.GitHub.GetPR(ctx, gh.ParamsGetPR{
+	pr, _, err := ctrl.GitHub.GetPR(ctx, github.ParamsGetPR{
 		Owner: params.Owner,
 		Repo:  params.Repo,
 		PRNum: prNum,

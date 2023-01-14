@@ -4,9 +4,16 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/google/go-github/v39/github"
+	"github.com/google/go-github/v49/github"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
+)
+
+type (
+	PullRequest = github.PullRequest
+	CommitFile  = github.CommitFile
+	Response    = github.Response
+	Label       = github.Label
 )
 
 type Client struct {
