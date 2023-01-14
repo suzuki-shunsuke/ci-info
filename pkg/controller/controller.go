@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -50,7 +49,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 
 	dir := params.Dir
 	if dir == "" { //nolint:nestif
-		d, err := ioutil.TempDir("", "ci-info")
+		d, err := os.MkdirTemp("", "ci-info")
 		if err != nil {
 			return fmt.Errorf("create a temporal directory: %w", err)
 		}
@@ -63,7 +62,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 			}
 			dir = d
 		}
-		if err := os.MkdirAll(dir, 0755); err != nil {
+		if err := os.MkdirAll(dir, 0o755); err != nil { //nolint:gomnd
 			return fmt.Errorf("create a directory "+dir+": %w", err)
 		}
 	}
@@ -112,7 +111,7 @@ func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullR
 			"size": len(prs),
 		}).Debug("the number of pull requests assosicated with the commit")
 		if len(prs) == 0 {
-			return nil, nil
+			return nil, nil //nolint:nilnil
 		}
 		prNum = prs[0].GetNumber()
 	}
