@@ -1,21 +1,6 @@
 {
   "extends": [
     "config:base",
-    "helpers:pinGitHubActionDigests"
-  ],
-  "automerge": true,
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["major"],
-      "automerge": false
-    },
-    {
-      "matchUpdateTypes": ["digest"],
-      "enabled": false
-    },
-    {
-      "postUpdateOptions": ["gomodTidy"],
-      "matchManagers": ["gomod"]
-    }
+    "github>suzuki-shunsuke/renovate-config#1.0.0"
   ]
 }
