@@ -6,9 +6,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/google/go-github/v39/github"
 	"github.com/sirupsen/logrus"
-	gh "github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
 )
 
@@ -24,9 +23,9 @@ type Params struct {
 }
 
 type GitHub interface {
-	GetPR(ctx context.Context, params gh.ParamsGetPR) (*github.PullRequest, *github.Response, error)
-	GetPRFiles(ctx context.Context, params gh.ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error)
-	ListPRsWithCommit(ctx context.Context, params gh.ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error)
+	GetPR(ctx context.Context, params github.ParamsGetPR) (*github.PullRequest, *github.Response, error)
+	GetPRFiles(ctx context.Context, params github.ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error)
+	ListPRsWithCommit(ctx context.Context, params github.ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error)
 }
 
 type Controller struct {
@@ -73,7 +72,7 @@ func New(ctx context.Context, params Params) (Controller, Params, error) { //nol
 		}
 	}
 
-	ghClient := gh.New(ctx, gh.ParamsNew{
+	ghClient := github.New(ctx, github.ParamsNew{
 		Token: params.GitHubToken,
 	})
 
