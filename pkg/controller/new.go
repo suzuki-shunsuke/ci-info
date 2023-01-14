@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-github/v39/github"
 	"github.com/sirupsen/logrus"
 	gh "github.com/suzuki-shunsuke/ci-info/pkg/github"
-	"github.com/suzuki-shunsuke/go-ci-env/v2/cienv"
+	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
 )
 
 type Params struct {
@@ -54,7 +54,7 @@ func New(ctx context.Context, params Params) (Controller, Params, error) { //nol
 	}
 
 	//nolint:nestif
-	if platform := cienv.Get(); platform != nil {
+	if platform := cienv.Get(nil); platform != nil {
 		if params.Owner == "" {
 			params.Owner = platform.RepoOwner()
 		}
