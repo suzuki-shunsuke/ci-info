@@ -14,9 +14,10 @@ var once sync.Once //nolint:gochecknoglobals
 // Handle calls the function "callback" when the sinal is sent.
 // This is useful to support canceling by signal.
 // Usage:
-//   c, cancel := context.WithCancel(ctx)
-//   go signal.Set(os.Stderr, cancel)
-//   ...
+//
+//	c, cancel := context.WithCancel(ctx)
+//	go signal.Set(os.Stderr, cancel)
+//	...
 func Handle(stderr io.Writer, callback func()) {
 	once.Do(func() {
 		signalChan := make(chan os.Signal, 1)
