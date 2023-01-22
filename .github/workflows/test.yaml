@@ -34,7 +34,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: path-filter
     permissions: {}
-    # Exclude pull requests from Renovate
     if: |
       needs.path-filter.outputs.update-aqua-checksums == 'true'
     steps:
