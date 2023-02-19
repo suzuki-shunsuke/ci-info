@@ -20,3 +20,4 @@ linters:
     - exhaustivestruct # https://github.com/mbilski/exhaustivestruct
     - varnamelen
     - exhaustruct
+    - musttag
