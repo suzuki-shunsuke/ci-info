@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/google/go-github/v49 v49.1.0
-	github.com/sirupsen/logrus v1.9.1
+	github.com/sirupsen/logrus v1.9.2
 	github.com/suzuki-shunsuke/go-ci-env/v3 v3.0.1
 	github.com/urfave/cli/v2 v2.25.3
 	golang.org/x/oauth2 v0.8.0
