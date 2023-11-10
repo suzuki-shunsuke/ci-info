@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
@@ -90,7 +91,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 	return nil
 }
 
-func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullRequest, error) {
+func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullRequest, error) { //nolint:cyclop
 	prNum := params.PRNum
 	if prNum <= 0 {
 		logrus.WithFields(logrus.Fields{
@@ -119,6 +120,30 @@ func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullR
 		Repo:  params.Repo,
 		PRNum: prNum,
 	})
+	if params.WaitMergeable {
+		ctx, cancel := context.WithTimeout(ctx, time.Duration(params.WaitMergeableTimeout)*time.Second)
+		defer cancel()
+		for {
+			if pr.Mergeable != nil {
+				break
+			}
+			logrus.Debug("retry to get a pull request because mergeable is nil yet")
+			select {
+			case <-ctx.Done():
+				return nil, fmt.Errorf("cancel context: get a pull request: %w", ctx.Err())
+			case <-time.After(1 * time.Second):
+				p, _, err := ctrl.GitHub.GetPR(ctx, gh.ParamsGetPR{
+					Owner: params.Owner,
+					Repo:  params.Repo,
+					PRNum: prNum,
+				})
+				if err != nil {
+					return nil, fmt.Errorf("get a pull request: %w", err)
+				}
+				pr = p
+			}
+		}
+	}
 	if err != nil {
 		return nil, fmt.Errorf("get a pull request: %w", err)
 	}
