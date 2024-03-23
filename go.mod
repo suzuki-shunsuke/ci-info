@@ -4,6 +4,7 @@ go 1.22.1
 
 require (
 	github.com/google/go-github/v49 v49.1.0
+	github.com/google/go-github/v60 v60.0.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/suzuki-shunsuke/go-ci-env/v3 v3.0.1
 	github.com/urfave/cli/v2 v2.27.1
