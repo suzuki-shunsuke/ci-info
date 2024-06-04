@@ -7,7 +7,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/suzuki-shunsuke/go-ci-env/v3 v3.0.1
 	github.com/urfave/cli/v2 v2.27.2
-	golang.org/x/oauth2 v0.20.0
+	golang.org/x/oauth2 v0.21.0
 )
 
 require (
