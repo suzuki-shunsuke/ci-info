@@ -68,6 +68,15 @@ func (runner *Runner) Run(ctx context.Context, args ...string) error {
 						Name:  "log-level",
 						Usage: "log level",
 					},
+					&cli.BoolFlag{
+						Name:  "wait-mergeable",
+						Usage: "wait until the pull request's 'mergeable' becomes not null",
+					},
+					&cli.IntFlag{
+						Name:  "wait-mergeable-timeout",
+						Usage: "timeout of wait-mergeable (second)",
+						Value: 60, //nolint:gomnd
+					},
 				},
 			},
 		},
