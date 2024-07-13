@@ -11,7 +11,7 @@ import (
 )
 
 func (c *Controller) Run(ctx context.Context, params Params) error {
-	if err := c.validateParams(params); err != nil {
+	if err := validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
 
@@ -77,7 +77,7 @@ var (
 	errSHAOrPRNumRequired = errors.New("sha or pr number is required")
 )
 
-func (c *Controller) validateParams(params Params) error {
+func validateParams(params Params) error {
 	if params.Owner == "" {
 		return errOwnerRequired
 	}
