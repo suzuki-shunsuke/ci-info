@@ -1,6 +1,6 @@
 module github.com/suzuki-shunsuke/ci-info
 
-go 1.22.2
+go 1.22.5
 
 require (
 	github.com/google/go-github/v49 v49.1.0
