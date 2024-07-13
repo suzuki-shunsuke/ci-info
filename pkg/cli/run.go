@@ -148,5 +148,14 @@ func setEnv(params *domain.Params) error {
 		}
 		params.PRNum = prNum
 	}
+	if params.PRNum <= 0 {
+		if gha, ok := platform.(*cienv.GitHubActions); ok {
+			num, err := gha.IssueNumber()
+			if err != nil {
+				return fmt.Errorf("get the issue number: %w", err)
+			}
+			params.IssueNum = num
+		}
+	}
 	return nil
 }

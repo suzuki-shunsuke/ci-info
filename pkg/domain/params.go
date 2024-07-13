@@ -9,4 +9,5 @@ type Params struct {
 	GitHubToken string
 	LogLevel    string
 	Prefix      string
+	IssueNum    int
 }

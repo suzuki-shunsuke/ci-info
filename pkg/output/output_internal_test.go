@@ -17,6 +17,7 @@ func Test_nonPREnv(t *testing.T) {
 	s := NonPREnv(params)
 	exp := `export CI_INFO_HAS_ASSOCIATED_PR=false
 export CI_INFO_IS_PR=false
+export CI_INFO_IS_ISSUE=false
 export CI_INFO_REPO_OWNER=suzuki-shunsuke
 export CI_INFO_REPO_NAME=foo`
 	if s != exp {
@@ -52,8 +53,10 @@ func Test_prEnv(t *testing.T) {
 		},
 	})
 	exp := `export CI_INFO_IS_PR=false
+export CI_INFO_IS_ISSUE=false
 export CI_INFO_HAS_ASSOCIATED_PR=true
 export CI_INFO_PR_NUMBER=10
+export CI_INFO_NUMBER=10
 export CI_INFO_BASE_REF=dev
 export CI_INFO_HEAD_REF=feature-branch
 export CI_INFO_PR_AUTHOR=octocat
