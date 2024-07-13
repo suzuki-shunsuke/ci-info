@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/spf13/afero"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
@@ -29,11 +30,13 @@ type Controller struct {
 	gh     GitHub
 	stdout io.Writer
 	stderr io.Writer
+	fs     afero.Fs
 }
 
-func New(ghClient github.Client) Controller {
+func New(ghClient github.Client, fs afero.Fs) Controller {
 	return Controller{
 		gh:     &ghClient,
+		fs:     fs,
 		stdout: os.Stdout,
 		stderr: os.Stderr,
 	}

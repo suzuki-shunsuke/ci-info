@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/afero"
 	"github.com/suzuki-shunsuke/ci-info/pkg/controller"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
@@ -95,7 +96,9 @@ func (r *Runner) action(c *cli.Context) error {
 		Token: params.GitHubToken,
 	})
 
-	ctrl := controller.New(ghClient)
+	fs := afero.NewOsFs()
+
+	ctrl := controller.New(ghClient, fs)
 
 	return ctrl.Run(c.Context, params) //nolint:wrapcheck
 }
