@@ -1,19 +1,20 @@
-package controller
+package output
 
 import (
 	"testing"
 
+	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
 func Test_nonPREnv(t *testing.T) {
 	t.Parallel()
-	params := Params{
+	params := domain.Params{
 		Prefix: "CI_INFO_",
 		Owner:  "suzuki-shunsuke",
 		Repo:   "foo",
 	}
-	s := nonPREnv(params)
+	s := NonPREnv(params)
 	exp := `export CI_INFO_HAS_ASSOCIATED_PR=false
 export CI_INFO_IS_PR=false
 export CI_INFO_REPO_OWNER=suzuki-shunsuke
@@ -37,7 +38,7 @@ func boolP(i bool) *bool {
 
 func Test_prEnv(t *testing.T) {
 	t.Parallel()
-	s := prEnv("CI_INFO_", "/tmp/ci-info_yoo", false, "suzuki-shunsuke", "foo", &github.PullRequest{
+	s := PREnv("CI_INFO_", "/tmp/ci-info_yoo", false, "suzuki-shunsuke", "foo", &github.PullRequest{
 		Number: intP(10),
 		Merged: boolP(true),
 		Base: &github.PullRequestBranch{

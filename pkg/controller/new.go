@@ -6,24 +6,13 @@ import (
 	"os"
 
 	"github.com/spf13/afero"
+	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
-type Params struct {
-	Owner       string
-	Repo        string
-	SHA         string
-	Dir         string
-	PRNum       int
-	GitHubToken string
-	LogLevel    string
-	Prefix      string
-}
-
 type GitHub interface {
-	GetPR(ctx context.Context, params github.ParamsGetPR) (*github.PullRequest, *github.Response, error)
+	GetPR(ctx context.Context, params domain.Params) (*github.PullRequest, error)
 	GetPRFiles(ctx context.Context, params github.ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error)
-	ListPRsWithCommit(ctx context.Context, params github.ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error)
 }
 
 type Controller struct {

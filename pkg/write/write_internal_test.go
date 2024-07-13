@@ -1,10 +1,14 @@
-package controller
+package write
 
 import (
 	"testing"
 
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
+
+func strP(i string) *string {
+	return &i
+}
 
 func Test_labelsTxt(t *testing.T) {
 	t.Parallel()

@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/afero"
 	"github.com/suzuki-shunsuke/ci-info/pkg/controller"
+	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
 	"github.com/urfave/cli/v2"
@@ -55,7 +56,7 @@ func (r *Runner) runCommand() *cli.Command {
 	}
 }
 
-func (r *Runner) setCLIArg(c *cli.Context, params controller.Params) controller.Params {
+func (r *Runner) setCLIArg(c *cli.Context, params domain.Params) domain.Params {
 	if owner := c.String("owner"); owner != "" {
 		params.Owner = owner
 	}
@@ -84,7 +85,7 @@ func (r *Runner) setCLIArg(c *cli.Context, params controller.Params) controller.
 }
 
 func (r *Runner) action(c *cli.Context) error {
-	params := controller.Params{}
+	params := domain.Params{}
 	params = r.setCLIArg(c, params)
 	if err := setEnv(&params); err != nil {
 		return err
@@ -126,7 +127,7 @@ func setLogLevel(logLevel string) {
 	logrus.SetLevel(lvl)
 }
 
-func setEnv(params *controller.Params) error {
+func setEnv(params *domain.Params) error {
 	platform := cienv.Get(nil)
 	if platform == nil {
 		return nil
