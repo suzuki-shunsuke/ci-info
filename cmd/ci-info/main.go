@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"os"
+	"os/signal"
 
 	"github.com/sirupsen/logrus"
 	"github.com/suzuki-shunsuke/ci-info/pkg/cli"
-	"github.com/suzuki-shunsuke/ci-info/pkg/signal"
 )
 
 var (
@@ -29,7 +29,7 @@ func core() error {
 			Date:    date,
 		},
 	}
-	ctx, cancel := context.WithCancel(context.Background())
-	go signal.Handle(os.Stderr, cancel)
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
 	return runner.Run(ctx, os.Args...) //nolint:wrapcheck
 }

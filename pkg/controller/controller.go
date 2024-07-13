@@ -13,20 +13,20 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
-func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint:funlen,cyclop
-	if err := ctrl.validateParams(params); err != nil {
+func (c *Controller) Run(ctx context.Context, params Params) error { //nolint:funlen,cyclop
+	if err := c.validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
 
 	isPR := params.PRNum > 0
 
-	pr, err := ctrl.getPR(ctx, params)
+	pr, err := c.getPR(ctx, params)
 	if err != nil {
 		return err
 	}
 
 	if pr == nil {
-		fmt.Fprintf(ctrl.stdout, `export %sHAS_ASSOCIATED_PR=false
+		fmt.Fprintf(c.stdout, `export %sHAS_ASSOCIATED_PR=false
 export %sIS_PR=false
 export %sREPO_OWNER=%s
 export %sREPO_NAME=%s
@@ -38,7 +38,7 @@ export %sREPO_NAME=%s
 		return nil
 	}
 
-	files, _, err := ctrl.gh.GetPRFiles(ctx, github.ParamsGetPRFiles{
+	files, _, err := c.gh.GetPRFiles(ctx, github.ParamsGetPRFiles{
 		Owner:    params.Owner,
 		Repo:     params.Repo,
 		PRNum:    pr.GetNumber(),
@@ -68,31 +68,31 @@ export %sREPO_NAME=%s
 		}
 	}
 
-	ctrl.printEnvs(params.Prefix, dir, isPR, params.Owner, params.Repo, pr)
+	c.printEnvs(params.Prefix, dir, isPR, params.Owner, params.Repo, pr)
 
-	if err := ctrl.writePRFilesJSON(filepath.Join(dir, "pr_files.json"), files); err != nil {
+	if err := c.writePRFilesJSON(filepath.Join(dir, "pr_files.json"), files); err != nil {
 		return err
 	}
 
-	if err := ctrl.writePRJSON(filepath.Join(dir, "pr.json"), pr); err != nil {
+	if err := c.writePRJSON(filepath.Join(dir, "pr.json"), pr); err != nil {
 		return err
 	}
 
-	if err := ctrl.writePRFilesTxt(filepath.Join(dir, "pr_files.txt"), files); err != nil {
+	if err := c.writePRFilesTxt(filepath.Join(dir, "pr_files.txt"), files); err != nil {
 		return err
 	}
 
-	if err := ctrl.writePRChangedFilesTxt(filepath.Join(dir, "pr_all_filenames.txt"), files); err != nil {
+	if err := c.writePRChangedFilesTxt(filepath.Join(dir, "pr_all_filenames.txt"), files); err != nil {
 		return err
 	}
 
-	if err := ctrl.writeLabelsTxt(filepath.Join(dir, "labels.txt"), pr.Labels); err != nil {
+	if err := c.writeLabelsTxt(filepath.Join(dir, "labels.txt"), pr.Labels); err != nil {
 		return fmt.Errorf("write labels.txt: %w", err)
 	}
 	return nil
 }
 
-func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullRequest, error) {
+func (c *Controller) getPR(ctx context.Context, params Params) (*github.PullRequest, error) {
 	prNum := params.PRNum
 	if prNum <= 0 {
 		logrus.WithFields(logrus.Fields{
@@ -100,7 +100,7 @@ func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullR
 			"repo":  params.Repo,
 			"sha":   params.SHA,
 		}).Debug("get pull request from SHA")
-		prs, _, err := ctrl.gh.ListPRsWithCommit(ctx, github.ParamsListPRsWithCommit{
+		prs, _, err := c.gh.ListPRsWithCommit(ctx, github.ParamsListPRsWithCommit{
 			Owner: params.Owner,
 			Repo:  params.Repo,
 			SHA:   params.SHA,
@@ -116,7 +116,7 @@ func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullR
 		}
 		prNum = prs[0].GetNumber()
 	}
-	pr, _, err := ctrl.gh.GetPR(ctx, github.ParamsGetPR{
+	pr, _, err := c.gh.GetPR(ctx, github.ParamsGetPR{
 		Owner: params.Owner,
 		Repo:  params.Repo,
 		PRNum: prNum,
@@ -133,7 +133,7 @@ var (
 	errSHAOrPRNumRequired = errors.New("sha or pr number is required")
 )
 
-func (ctrl *Controller) validateParams(params Params) error {
+func (c *Controller) validateParams(params Params) error {
 	if params.Owner == "" {
 		return errOwnerRequired
 	}
@@ -146,7 +146,7 @@ func (ctrl *Controller) validateParams(params Params) error {
 	return nil
 }
 
-func (ctrl *Controller) writeLabelsTxt(p string, labels []*github.Label) error {
+func (c *Controller) writeLabelsTxt(p string, labels []*github.Label) error {
 	labelNames := make([]string, len(labels))
 	for i, label := range labels {
 		labelNames[i] = label.GetName()
@@ -155,10 +155,10 @@ func (ctrl *Controller) writeLabelsTxt(p string, labels []*github.Label) error {
 	if len(labelNames) != 0 {
 		txt = strings.Join(labelNames, "\n") + "\n"
 	}
-	return ctrl.writeFile(p, []byte(txt))
+	return c.writeFile(p, []byte(txt))
 }
 
-func (ctrl *Controller) writePRFilesTxt(p string, files []*github.CommitFile) error {
+func (c *Controller) writePRFilesTxt(p string, files []*github.CommitFile) error {
 	prFileNames := make([]string, len(files))
 	for i, file := range files {
 		prFileNames[i] = file.GetFilename()
@@ -167,10 +167,10 @@ func (ctrl *Controller) writePRFilesTxt(p string, files []*github.CommitFile) er
 	if len(prFileNames) != 0 {
 		txt = strings.Join(prFileNames, "\n") + "\n"
 	}
-	return ctrl.writeFile(p, []byte(txt))
+	return c.writeFile(p, []byte(txt))
 }
 
-func (ctrl *Controller) writeFile(p string, data []byte) error {
+func (c *Controller) writeFile(p string, data []byte) error {
 	file, err := os.Create(p)
 	if err != nil {
 		return fmt.Errorf("create a file %s: %w", p, err)
@@ -182,7 +182,7 @@ func (ctrl *Controller) writeFile(p string, data []byte) error {
 	return nil
 }
 
-func (ctrl *Controller) writePRChangedFilesTxt(p string, files []*github.CommitFile) error {
+func (c *Controller) writePRChangedFilesTxt(p string, files []*github.CommitFile) error {
 	prFileNames := make(map[string]struct{}, len(files))
 	for _, file := range files {
 		prFileNames[file.GetFilename()] = struct{}{}
@@ -199,10 +199,10 @@ func (ctrl *Controller) writePRChangedFilesTxt(p string, files []*github.CommitF
 	if len(prFileNames) != 0 {
 		txt = strings.Join(arr, "\n") + "\n"
 	}
-	return ctrl.writeFile(p, []byte(txt))
+	return c.writeFile(p, []byte(txt))
 }
 
-func (ctrl *Controller) writePRJSON(p string, pr *github.PullRequest) error {
+func (c *Controller) writePRJSON(p string, pr *github.PullRequest) error {
 	prJSON, err := os.Create(p)
 	if err != nil {
 		return fmt.Errorf("create a file "+p+": %w", err)
@@ -214,7 +214,7 @@ func (ctrl *Controller) writePRJSON(p string, pr *github.PullRequest) error {
 	return nil
 }
 
-func (ctrl *Controller) writePRFilesJSON(p string, files []*github.CommitFile) error {
+func (c *Controller) writePRFilesJSON(p string, files []*github.CommitFile) error {
 	prFilesJSON, err := os.Create(p)
 	if err != nil {
 		return fmt.Errorf("create a file "+p+": %w", err)
@@ -226,8 +226,8 @@ func (ctrl *Controller) writePRFilesJSON(p string, files []*github.CommitFile) e
 	return nil
 }
 
-func (ctrl *Controller) printEnvs(prefix, dir string, isPR bool, owner, repo string, pr *github.PullRequest) {
-	fmt.Fprintf(ctrl.stdout, `export %sIS_PR=%t
+func (c *Controller) printEnvs(prefix, dir string, isPR bool, owner, repo string, pr *github.PullRequest) {
+	fmt.Fprintf(c.stdout, `export %sIS_PR=%t
 export %sHAS_ASSOCIATED_PR=true
 export %sPR_NUMBER=%d
 export %sBASE_REF=%s

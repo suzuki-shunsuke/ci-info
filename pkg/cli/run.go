@@ -11,7 +11,50 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-func (runner *Runner) setCLIArg(c *cli.Context, params controller.Params) controller.Params {
+func (r *Runner) runCommand() *cli.Command {
+	return &cli.Command{
+		Name:   "run",
+		Usage:  "get CI information",
+		Action: r.action,
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:  "owner",
+				Usage: "repository owner",
+			},
+			&cli.StringFlag{
+				Name:  "repo",
+				Usage: "repository name",
+			},
+			&cli.StringFlag{
+				Name:  "sha",
+				Usage: "commit SHA",
+			},
+			&cli.StringFlag{
+				Name:  "dir",
+				Usage: "directory path where files are created. The directory is created by os.MkdirAll if it doesn't exist. By default the directory is created at Go's ioutil.TempDir",
+			},
+			&cli.IntFlag{
+				Name:  "pr",
+				Usage: "pull request number",
+			},
+			&cli.StringFlag{
+				Name:  "github-token",
+				Usage: "GitHub Access Token [$GITHUB_TOKEN, $GITHUB_ACCESS_TOKEN]",
+			},
+			&cli.StringFlag{
+				Name:  "prefix",
+				Usage: "The prefix of environment variable name",
+				Value: "CI_INFO_",
+			},
+			&cli.StringFlag{
+				Name:  "log-level",
+				Usage: "log level",
+			},
+		},
+	}
+}
+
+func (r *Runner) setCLIArg(c *cli.Context, params controller.Params) controller.Params {
 	if owner := c.String("owner"); owner != "" {
 		params.Owner = owner
 	}
@@ -39,9 +82,9 @@ func (runner *Runner) setCLIArg(c *cli.Context, params controller.Params) contro
 	return params
 }
 
-func (runner *Runner) action(c *cli.Context) error {
+func (r *Runner) action(c *cli.Context) error {
 	params := controller.Params{}
-	params = runner.setCLIArg(c, params)
+	params = r.setCLIArg(c, params)
 	if err := setEnv(&params); err != nil {
 		return err
 	}
