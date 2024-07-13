@@ -63,7 +63,7 @@ export %sREPO_NAME=%s
 			}
 			dir = d
 		}
-		if err := os.MkdirAll(dir, 0o755); err != nil { //nolint:gomnd
+		if err := os.MkdirAll(dir, 0o755); err != nil { //nolint:mnd
 			return fmt.Errorf("create a directory %s: %w", dir, err)
 		}
 	}
