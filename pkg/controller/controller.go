@@ -20,9 +20,9 @@ func (c *Controller) Run(ctx context.Context, params domain.Params) error {
 
 	isPR := params.PRNum > 0
 
-	pr, err := c.getPR(ctx, params)
+	pr, err := c.gh.GetPR(ctx, params)
 	if err != nil {
-		return err
+		return fmt.Errorf("get an associated pull request: %w", err)
 	}
 
 	if pr == nil {

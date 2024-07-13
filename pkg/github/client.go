@@ -58,7 +58,7 @@ type ParamsListPRsWithCommit struct {
 	SHA   string
 }
 
-func (c *Client) GetPR(ctx context.Context, params ParamsGetPR) (*github.PullRequest, *github.Response, error) {
+func (c *Client) getPR(ctx context.Context, params ParamsGetPR) (*github.PullRequest, *github.Response, error) {
 	return c.Client.PullRequests.Get(ctx, params.Owner, params.Repo, params.PRNum) //nolint:wrapcheck
 }
 
