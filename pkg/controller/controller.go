@@ -16,6 +16,11 @@ func (c *Controller) Run(ctx context.Context, params domain.Params) error {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
 
+	if params.IssueNum > 0 {
+		fmt.Fprintln(c.stdout, output.IssueEnv(params))
+		return nil
+	}
+
 	isPR := params.PRNum > 0
 
 	pr, err := c.gh.GetPR(ctx, params)
@@ -52,9 +57,9 @@ func (c *Controller) Run(ctx context.Context, params domain.Params) error {
 }
 
 var (
-	errOwnerRequired      = errors.New("owner is required")
-	errRepoRequired       = errors.New("repo is required")
-	errSHAOrPRNumRequired = errors.New("sha or pr number is required")
+	errOwnerRequired                = errors.New("owner is required")
+	errRepoRequired                 = errors.New("repo is required")
+	errSHAOrPRNumOrIssueNumRequired = errors.New("sha or pr number or issue number is required")
 )
 
 func validateParams(params domain.Params) error {
@@ -64,8 +69,8 @@ func validateParams(params domain.Params) error {
 	if params.Repo == "" {
 		return errRepoRequired
 	}
-	if params.PRNum <= 0 && params.SHA == "" {
-		return errSHAOrPRNumRequired
+	if params.PRNum <= 0 && params.SHA == "" && params.IssueNum <= 0 {
+		return errSHAOrPRNumOrIssueNumRequired
 	}
 	return nil
 }
