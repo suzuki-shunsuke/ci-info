@@ -10,10 +10,12 @@ import (
 )
 
 type (
-	PullRequest = github.PullRequest
-	CommitFile  = github.CommitFile
-	Response    = github.Response
-	Label       = github.Label
+	PullRequest       = github.PullRequest
+	PullRequestBranch = github.PullRequestBranch
+	CommitFile        = github.CommitFile
+	Response          = github.Response
+	Label             = github.Label
+	User              = github.User
 )
 
 type Client struct {

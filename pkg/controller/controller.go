@@ -23,7 +23,7 @@ func (c *Controller) Run(ctx context.Context, params Params) error {
 	}
 
 	if pr == nil {
-		c.outputNonPR(params)
+		fmt.Fprintln(c.stdout, nonPREnv(params))
 		return nil
 	}
 
@@ -42,7 +42,7 @@ func (c *Controller) Run(ctx context.Context, params Params) error {
 		return err
 	}
 
-	c.printEnvs(params.Prefix, dir, isPR, params.Owner, params.Repo, pr)
+	fmt.Fprintln(c.stdout, prEnv(params.Prefix, dir, isPR, params.Owner, params.Repo, pr))
 
 	if err := c.writeFiles(dir, pr, files); err != nil {
 		return err
