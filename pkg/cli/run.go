@@ -2,8 +2,12 @@ package cli
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/sirupsen/logrus"
 	"github.com/suzuki-shunsuke/ci-info/pkg/controller"
+	"github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
 	"github.com/urfave/cli/v2"
 )
 
@@ -38,11 +42,64 @@ func (runner *Runner) setCLIArg(c *cli.Context, params controller.Params) contro
 func (runner *Runner) action(c *cli.Context) error {
 	params := controller.Params{}
 	params = runner.setCLIArg(c, params)
-
-	ctrl, params, err := controller.New(c.Context, params)
-	if err != nil {
-		return fmt.Errorf("initialize a controller: %w", err)
+	if err := setEnv(&params); err != nil {
+		return err
 	}
+	setLogLevel(params.LogLevel)
+	params.GitHubToken = getGitHubToken(params.GitHubToken)
+
+	ghClient := github.New(c.Context, github.ParamsNew{
+		Token: params.GitHubToken,
+	})
+
+	ctrl := controller.New(ghClient)
 
 	return ctrl.Run(c.Context, params) //nolint:wrapcheck
+}
+
+func getGitHubToken(token string) string {
+	if token != "" {
+		return token
+	}
+	if token := os.Getenv("GITHUB_TOKEN"); token != "" {
+		return token
+	}
+	return os.Getenv("GITHUB_ACCESS_TOKEN")
+}
+
+func setLogLevel(logLevel string) {
+	if logLevel == "" {
+		return
+	}
+	lvl, err := logrus.ParseLevel(logLevel)
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"log_level": logLevel,
+		}).WithError(err).Error("the log level is invalid")
+	}
+	logrus.SetLevel(lvl)
+}
+
+func setEnv(params *controller.Params) error {
+	platform := cienv.Get(nil)
+	if platform == nil {
+		return nil
+	}
+	if params.Owner == "" {
+		params.Owner = platform.RepoOwner()
+	}
+	if params.Repo == "" {
+		params.Repo = platform.RepoName()
+	}
+	if params.SHA == "" {
+		params.SHA = platform.SHA()
+	}
+	if params.PRNum <= 0 {
+		prNum, err := platform.PRNumber()
+		if err != nil {
+			return fmt.Errorf("get the pull request number: %w", err)
+		}
+		params.PRNum = prNum
+	}
+	return nil
 }
