@@ -56,17 +56,17 @@ type ParamsListPRsWithCommit struct {
 	SHA   string
 }
 
-func (client *Client) GetPR(ctx context.Context, params ParamsGetPR) (*github.PullRequest, *github.Response, error) {
-	return client.Client.PullRequests.Get(ctx, params.Owner, params.Repo, params.PRNum) //nolint:wrapcheck
+func (c *Client) GetPR(ctx context.Context, params ParamsGetPR) (*github.PullRequest, *github.Response, error) {
+	return c.Client.PullRequests.Get(ctx, params.Owner, params.Repo, params.PRNum) //nolint:wrapcheck
 }
 
-func (client *Client) getPRFiles(ctx context.Context, params ParamsGetPRFiles, opts *github.ListOptions) ([]*github.CommitFile, *github.Response, error) {
-	return client.Client.PullRequests.ListFiles(ctx, params.Owner, params.Repo, params.PRNum, opts) //nolint:wrapcheck
+func (c *Client) getPRFiles(ctx context.Context, params ParamsGetPRFiles, opts *github.ListOptions) ([]*github.CommitFile, *github.Response, error) {
+	return c.Client.PullRequests.ListFiles(ctx, params.Owner, params.Repo, params.PRNum, opts) //nolint:wrapcheck
 }
 
 const maxPerPage = 100
 
-func (client *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error) {
+func (c *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error) {
 	ret := []*github.CommitFile{}
 	if params.FileSize == 0 {
 		logrus.Debug("file size is 0")
@@ -79,7 +79,7 @@ func (client *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) (
 			Page:    i,
 			PerPage: maxPerPage,
 		}
-		files, resp, err := client.getPRFiles(ctx, params, opts)
+		files, resp, err := c.getPRFiles(ctx, params, opts)
 		if err != nil {
 			return files, resp, err
 		}
@@ -93,6 +93,6 @@ func (client *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) (
 	return ret, gResp, nil
 }
 
-func (client *Client) ListPRsWithCommit(ctx context.Context, params ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error) {
-	return client.Client.PullRequests.ListPullRequestsWithCommit(ctx, params.Owner, params.Repo, params.SHA, nil) //nolint:wrapcheck
+func (c *Client) ListPRsWithCommit(ctx context.Context, params ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error) {
+	return c.Client.PullRequests.ListPullRequestsWithCommit(ctx, params.Owner, params.Repo, params.SHA, nil) //nolint:wrapcheck
 }
