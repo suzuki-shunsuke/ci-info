@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -59,7 +58,7 @@ func (c *Controller) writePRFilesTxt(p string, files []*github.CommitFile) error
 }
 
 func (c *Controller) writeFile(p string, data []byte) error {
-	file, err := os.Create(p)
+	file, err := c.fs.Create(p)
 	if err != nil {
 		return fmt.Errorf("create a file %s: %w", p, err)
 	}
@@ -91,7 +90,7 @@ func (c *Controller) writePRChangedFilesTxt(p string, files []*github.CommitFile
 }
 
 func (c *Controller) writePRJSON(p string, pr *github.PullRequest) error {
-	prJSON, err := os.Create(p)
+	prJSON, err := c.fs.Create(p)
 	if err != nil {
 		return fmt.Errorf("create a file "+p+": %w", err)
 	}
@@ -103,7 +102,7 @@ func (c *Controller) writePRJSON(p string, pr *github.PullRequest) error {
 }
 
 func (c *Controller) writePRFilesJSON(p string, files []*github.CommitFile) error {
-	prFilesJSON, err := os.Create(p)
+	prFilesJSON, err := c.fs.Create(p)
 	if err != nil {
 		return fmt.Errorf("create a file "+p+": %w", err)
 	}

@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
 	"path/filepath"
 
+	"github.com/spf13/afero"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
@@ -52,7 +52,7 @@ func (c *Controller) Run(ctx context.Context, params Params) error {
 
 func (c *Controller) mkDir(dir string) (string, error) {
 	if dir == "" {
-		d, err := os.MkdirTemp("", "ci-info")
+		d, err := afero.TempDir(c.fs, "", "ci-info")
 		if err != nil {
 			return "", fmt.Errorf("create a temporal directory: %w", err)
 		}
@@ -65,7 +65,7 @@ func (c *Controller) mkDir(dir string) (string, error) {
 		}
 		dir = d
 	}
-	if err := os.MkdirAll(dir, 0o755); err != nil { //nolint:mnd
+	if err := c.fs.MkdirAll(dir, 0o755); err != nil { //nolint:mnd
 		return "", fmt.Errorf("create a directory %s: %w", dir, err)
 	}
 	return dir, nil
