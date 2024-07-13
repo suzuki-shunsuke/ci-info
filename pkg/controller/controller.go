@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/afero"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/pkg/write"
 )
 
 func (c *Controller) Run(ctx context.Context, params Params) error {
@@ -44,8 +45,8 @@ func (c *Controller) Run(ctx context.Context, params Params) error {
 
 	fmt.Fprintln(c.stdout, prEnv(params.Prefix, dir, isPR, params.Owner, params.Repo, pr))
 
-	if err := c.writeFiles(dir, pr, files); err != nil {
-		return err
+	if err := write.Write(c.fs, dir, pr, files); err != nil {
+		return fmt.Errorf("write files: %w", err)
 	}
 	return nil
 }

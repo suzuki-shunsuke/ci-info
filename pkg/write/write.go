@@ -1,4 +1,4 @@
-package controller
+package write
 
 import (
 	"encoding/json"
@@ -10,24 +10,24 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
-func (c *Controller) writeFiles(dir string, pr *github.PullRequest, files []*github.CommitFile) error {
-	if err := writeJSON(c.fs, filepath.Join(dir, "pr_files.json"), files); err != nil {
+func Write(fs afero.Fs, dir string, pr *github.PullRequest, files []*github.CommitFile) error {
+	if err := writeJSON(fs, filepath.Join(dir, "pr_files.json"), files); err != nil {
 		return err
 	}
 
-	if err := writeJSON(c.fs, filepath.Join(dir, "pr.json"), pr); err != nil {
+	if err := writeJSON(fs, filepath.Join(dir, "pr.json"), pr); err != nil {
 		return err
 	}
 
-	if err := writeFile(c.fs, filepath.Join(dir, "pr_files.txt"), []byte(prFilesTxt(files)+"\n")); err != nil {
+	if err := writeFile(fs, filepath.Join(dir, "pr_files.txt"), []byte(prFilesTxt(files)+"\n")); err != nil {
 		return err
 	}
 
-	if err := writeFile(c.fs, filepath.Join(dir, "pr_all_filenames.txt"), []byte(prChangedFilesTxt(files)+"\n")); err != nil {
+	if err := writeFile(fs, filepath.Join(dir, "pr_all_filenames.txt"), []byte(prChangedFilesTxt(files)+"\n")); err != nil {
 		return err
 	}
 
-	if err := writeFile(c.fs, filepath.Join(dir, "labels.txt"), []byte(labelsTxt(pr.Labels)+"\n")); err != nil {
+	if err := writeFile(fs, filepath.Join(dir, "labels.txt"), []byte(labelsTxt(pr.Labels)+"\n")); err != nil {
 		return fmt.Errorf("write labels.txt: %w", err)
 	}
 
