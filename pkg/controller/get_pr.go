@@ -5,10 +5,11 @@ import (
 	"fmt"
 
 	"github.com/sirupsen/logrus"
+	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
-func (c *Controller) getPRNum(ctx context.Context, params Params) (int, error) {
+func (c *Controller) getPRNum(ctx context.Context, params domain.Params) (int, error) {
 	if params.PRNum > 0 {
 		return params.PRNum, nil
 	}
@@ -34,7 +35,7 @@ func (c *Controller) getPRNum(ctx context.Context, params Params) (int, error) {
 	return prs[0].GetNumber(), nil
 }
 
-func (c *Controller) getPR(ctx context.Context, params Params) (*github.PullRequest, error) {
+func (c *Controller) getPR(ctx context.Context, params domain.Params) (*github.PullRequest, error) {
 	prNum, err := c.getPRNum(ctx, params)
 	if err != nil {
 		return nil, err

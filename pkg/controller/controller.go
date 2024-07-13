@@ -7,11 +7,13 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/afero"
+	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/pkg/output"
 	"github.com/suzuki-shunsuke/ci-info/pkg/write"
 )
 
-func (c *Controller) Run(ctx context.Context, params Params) error {
+func (c *Controller) Run(ctx context.Context, params domain.Params) error {
 	if err := validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
@@ -24,7 +26,7 @@ func (c *Controller) Run(ctx context.Context, params Params) error {
 	}
 
 	if pr == nil {
-		fmt.Fprintln(c.stdout, nonPREnv(params))
+		fmt.Fprintln(c.stdout, output.NonPREnv(params))
 		return nil
 	}
 
@@ -43,7 +45,7 @@ func (c *Controller) Run(ctx context.Context, params Params) error {
 		return err
 	}
 
-	fmt.Fprintln(c.stdout, prEnv(params.Prefix, dir, isPR, params.Owner, params.Repo, pr))
+	fmt.Fprintln(c.stdout, output.PREnv(params.Prefix, dir, isPR, params.Owner, params.Repo, pr))
 
 	if err := write.Write(c.fs, dir, pr, files); err != nil {
 		return fmt.Errorf("write files: %w", err)
@@ -78,7 +80,7 @@ var (
 	errSHAOrPRNumRequired = errors.New("sha or pr number is required")
 )
 
-func validateParams(params Params) error {
+func validateParams(params domain.Params) error {
 	if params.Owner == "" {
 		return errOwnerRequired
 	}

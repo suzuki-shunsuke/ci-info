@@ -9,17 +9,6 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 )
 
-type Params struct {
-	Owner       string
-	Repo        string
-	SHA         string
-	Dir         string
-	PRNum       int
-	GitHubToken string
-	LogLevel    string
-	Prefix      string
-}
-
 type GitHub interface {
 	GetPR(ctx context.Context, params github.ParamsGetPR) (*github.PullRequest, *github.Response, error)
 	GetPRFiles(ctx context.Context, params github.ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error)
