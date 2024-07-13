@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -27,12 +26,15 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 	}
 
 	if pr == nil {
-		fmt.Fprintln(ctrl.Stdout, strings.Join([]string{
-			"export " + params.Prefix + "HAS_ASSOCIATED_PR=false",
-			"export " + params.Prefix + "IS_PR=false",
-			"export " + params.Prefix + "REPO_OWNER=" + params.Owner,
-			"export " + params.Prefix + "REPO_NAME=" + params.Repo,
-		}, "\n"))
+		fmt.Fprintf(ctrl.Stdout, `export %sHAS_ASSOCIATED_PR=false
+export %sIS_PR=false
+export %sREPO_OWNER=%s
+export %sREPO_NAME=%s
+`,
+			params.Prefix,
+			params.Prefix,
+			params.Prefix, params.Owner,
+			params.Prefix, params.Repo)
 		return nil
 	}
 
@@ -62,7 +64,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 			dir = d
 		}
 		if err := os.MkdirAll(dir, 0o755); err != nil { //nolint:gomnd
-			return fmt.Errorf("create a directory "+dir+": %w", err)
+			return fmt.Errorf("create a directory %s: %w", dir, err)
 		}
 	}
 
@@ -171,11 +173,11 @@ func (ctrl *Controller) writePRFilesTxt(p string, files []*github.CommitFile) er
 func (ctrl *Controller) writeFile(p string, data []byte) error {
 	file, err := os.Create(p)
 	if err != nil {
-		return fmt.Errorf("create a file "+p+": %w", err)
+		return fmt.Errorf("create a file %s: %w", p, err)
 	}
 	defer file.Close()
 	if _, err := file.Write(data); err != nil {
-		return fmt.Errorf("write a file "+p+": %w", err)
+		return fmt.Errorf("write a file %s: %w", p, err)
 	}
 	return nil
 }
@@ -225,16 +227,26 @@ func (ctrl *Controller) writePRFilesJSON(p string, files []*github.CommitFile) e
 }
 
 func (ctrl *Controller) printEnvs(prefix, dir string, isPR bool, owner, repo string, pr *github.PullRequest) {
-	fmt.Fprintln(ctrl.Stdout, strings.Join([]string{
-		"export " + prefix + "IS_PR=" + strconv.FormatBool(isPR),
-		"export " + prefix + "HAS_ASSOCIATED_PR=true",
-		"export " + prefix + "PR_NUMBER=" + strconv.Itoa(pr.GetNumber()),
-		"export " + prefix + "BASE_REF=" + pr.GetBase().GetRef(),
-		"export " + prefix + "HEAD_REF=" + pr.GetHead().GetRef(),
-		"export " + prefix + "PR_AUTHOR=" + pr.GetUser().GetLogin(),
-		"export " + prefix + "PR_MERGED=" + strconv.FormatBool(pr.GetMerged()),
-		"export " + prefix + "TEMP_DIR=" + dir,
-		"export " + prefix + "REPO_OWNER=" + owner,
-		"export " + prefix + "REPO_NAME=" + repo,
-	}, "\n"))
+	fmt.Fprintf(ctrl.Stdout, `export %sIS_PR=%t
+export %sHAS_ASSOCIATED_PR=true
+export %sPR_NUMBER=%d
+export %sBASE_REF=%s
+export %sHEAD_REF=%s
+export %sPR_AUTHOR=%s
+export %sPR_MERGED=%t
+export %sTEMP_DIR=%s
+export %sREPO_OWNER=%s
+export %sREPO_NAME=%s
+`,
+		prefix, isPR,
+		prefix,
+		prefix, pr.GetNumber(),
+		prefix, pr.GetBase().GetRef(),
+		prefix, pr.GetHead().GetRef(),
+		prefix, pr.GetUser().GetLogin(),
+		prefix, pr.GetMerged(),
+		prefix, dir,
+		prefix, owner,
+		prefix, repo,
+	)
 }
