@@ -40,7 +40,7 @@ func (c *Controller) Run(ctx context.Context, params domain.Params) error {
 
 	dir, err := write.MkDir(c.fs, params.Dir)
 	if err != nil {
-		return err
+		return fmt.Errorf("create a directory: %w", err)
 	}
 
 	fmt.Fprintln(c.stdout, output.PREnv(params.Prefix, dir, isPR, params.Owner, params.Repo, pr))

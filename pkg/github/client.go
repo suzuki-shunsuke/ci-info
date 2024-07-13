@@ -52,18 +52,10 @@ type ParamsGetPRFiles struct {
 	FileSize int
 }
 
-type ParamsListPRsWithCommit struct {
+type paramsListPRsWithCommit struct {
 	Owner string
 	Repo  string
 	SHA   string
-}
-
-func (c *Client) getPR(ctx context.Context, params ParamsGetPR) (*github.PullRequest, *github.Response, error) {
-	return c.Client.PullRequests.Get(ctx, params.Owner, params.Repo, params.PRNum) //nolint:wrapcheck
-}
-
-func (c *Client) getPRFiles(ctx context.Context, params ParamsGetPRFiles, opts *github.ListOptions) ([]*github.CommitFile, *github.Response, error) {
-	return c.Client.PullRequests.ListFiles(ctx, params.Owner, params.Repo, params.PRNum, opts) //nolint:wrapcheck
 }
 
 const maxPerPage = 100
@@ -81,9 +73,9 @@ func (c *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) ([]*gi
 			Page:    i,
 			PerPage: maxPerPage,
 		}
-		files, resp, err := c.getPRFiles(ctx, params, opts)
+		files, resp, err := c.Client.PullRequests.ListFiles(ctx, params.Owner, params.Repo, params.PRNum, opts)
 		if err != nil {
-			return files, resp, err
+			return files, resp, err //nolint:wrapcheck
 		}
 		gResp = resp
 		ret = append(ret, files...)
@@ -95,6 +87,6 @@ func (c *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) ([]*gi
 	return ret, gResp, nil
 }
 
-func (c *Client) ListPRsWithCommit(ctx context.Context, params ParamsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error) {
+func (c *Client) ListPRsWithCommit(ctx context.Context, params paramsListPRsWithCommit) ([]*github.PullRequest, *github.Response, error) {
 	return c.Client.PullRequests.ListPullRequestsWithCommit(ctx, params.Owner, params.Repo, params.SHA, nil) //nolint:wrapcheck
 }
