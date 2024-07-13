@@ -26,7 +26,7 @@ func (ctrl *Controller) Run(ctx context.Context, params Params) error { //nolint
 	}
 
 	if pr == nil {
-		fmt.Fprintf(ctrl.Stdout, `export %sHAS_ASSOCIATED_PR=false
+		fmt.Fprintf(ctrl.stdout, `export %sHAS_ASSOCIATED_PR=false
 export %sIS_PR=false
 export %sREPO_OWNER=%s
 export %sREPO_NAME=%s
@@ -38,7 +38,7 @@ export %sREPO_NAME=%s
 		return nil
 	}
 
-	files, _, err := ctrl.GitHub.GetPRFiles(ctx, github.ParamsGetPRFiles{
+	files, _, err := ctrl.gh.GetPRFiles(ctx, github.ParamsGetPRFiles{
 		Owner:    params.Owner,
 		Repo:     params.Repo,
 		PRNum:    pr.GetNumber(),
@@ -100,7 +100,7 @@ func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullR
 			"repo":  params.Repo,
 			"sha":   params.SHA,
 		}).Debug("get pull request from SHA")
-		prs, _, err := ctrl.GitHub.ListPRsWithCommit(ctx, github.ParamsListPRsWithCommit{
+		prs, _, err := ctrl.gh.ListPRsWithCommit(ctx, github.ParamsListPRsWithCommit{
 			Owner: params.Owner,
 			Repo:  params.Repo,
 			SHA:   params.SHA,
@@ -116,7 +116,7 @@ func (ctrl *Controller) getPR(ctx context.Context, params Params) (*github.PullR
 		}
 		prNum = prs[0].GetNumber()
 	}
-	pr, _, err := ctrl.GitHub.GetPR(ctx, github.ParamsGetPR{
+	pr, _, err := ctrl.gh.GetPR(ctx, github.ParamsGetPR{
 		Owner: params.Owner,
 		Repo:  params.Repo,
 		PRNum: prNum,
@@ -227,7 +227,7 @@ func (ctrl *Controller) writePRFilesJSON(p string, files []*github.CommitFile) e
 }
 
 func (ctrl *Controller) printEnvs(prefix, dir string, isPR bool, owner, repo string, pr *github.PullRequest) {
-	fmt.Fprintf(ctrl.Stdout, `export %sIS_PR=%t
+	fmt.Fprintf(ctrl.stdout, `export %sIS_PR=%t
 export %sHAS_ASSOCIATED_PR=true
 export %sPR_NUMBER=%d
 export %sBASE_REF=%s
