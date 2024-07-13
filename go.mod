@@ -10,6 +10,8 @@ require (
 	golang.org/x/oauth2 v0.21.0
 )
 
+replace github.com/suzuki-shunsuke/go-ci-env/v3 v3.0.1 => github.com/suzuki-shunsuke/go-ci-env/v3 v3.0.2-0.20240704231416-05c06201a293
+
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect

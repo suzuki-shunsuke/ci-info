@@ -17,6 +17,8 @@ type Params struct {
 	SHA         string
 	Dir         string
 	PRNum       int
+	IssueNum    int
+	Num         int
 	GitHubToken string
 	LogLevel    string
 	Prefix      string
