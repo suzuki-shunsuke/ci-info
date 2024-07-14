@@ -19,3 +19,5 @@ require (
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 )
+
+replace github.com/suzuki-shunsuke/go-ci-env/v3 v3.0.1 => github.com/suzuki-shunsuke/go-ci-env/v3 v3.0.2-0.20240714011104-24d6df59535f
