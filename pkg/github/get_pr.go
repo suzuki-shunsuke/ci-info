@@ -42,7 +42,7 @@ func (c *Client) GetPR(ctx context.Context, params domain.Params) (*PullRequest,
 	if prNum <= 0 {
 		return nil, nil //nolint:nilnil
 	}
-	pr, _, err := c.Client.PullRequests.Get(ctx, params.Owner, params.Repo, params.PRNum)
+	pr, _, err := c.Client.PullRequests.Get(ctx, params.Owner, params.Repo, prNum)
 	if err != nil {
 		return nil, fmt.Errorf("get a pull request: %w", err)
 	}
