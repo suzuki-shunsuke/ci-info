@@ -15,3 +15,17 @@ jobs:
     permissions:
       pull-requests: write
       contents: read # To checkout private repository
+
+  integration-test:
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
+        with:
+          go-version: "1.22.5"
+          cache: true
+      - run: go run ./cmd/ci-info run
+        env:
+          GITHUB_TOKEN: ${{github.token}}
