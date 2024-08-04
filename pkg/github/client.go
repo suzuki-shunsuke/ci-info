@@ -24,19 +24,37 @@ type Client struct {
 
 type ParamsNew struct {
 	Token string
+	BaseURL string
+	GraphQLURL string
 }
 
-func New(ctx context.Context, params ParamsNew) Client {
-	if params.Token == "" {
-		return Client{
-			Client: github.NewClient(http.DefaultClient),
+func New(ctx context.Context, params ParamsNew) (Client, error) {
+	gh := newGitHub(ctx, params.Token)
+	if params.BaseURL != "" {
+		gh, err := gh.WithEnterpriseURLs(params.BaseURL, params.BaseURL)
+		if err != nil {
+return Client{}, err
 		}
+		return Client{
+			Client: gh,
+		}, nil
 	}
 	return Client{
-		Client: github.NewClient(oauth2.NewClient(ctx, oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: params.Token},
-		))),
+		Client: gh,
+	}, nil
+}
+
+func newGitHub(ctx context.Context, token string) *github.Client {
+			return github.NewClient(newHTTP(ctx, token))
+}
+
+func newHTTP(ctx context.Context, token string) *http.Client {
+	if token == "" {
+		return http.DefaultClient
 	}
+	return oauth2.NewClient(ctx, oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: token},
+	))
 }
 
 type ParamsGetPR struct {
