@@ -23,8 +23,8 @@ type Client struct {
 }
 
 type ParamsNew struct {
-	Token string
-	BaseURL string
+	Token      string
+	BaseURL    string
 	GraphQLURL string
 }
 
@@ -33,7 +33,7 @@ func New(ctx context.Context, params ParamsNew) (Client, error) {
 	if params.BaseURL != "" {
 		gh, err := gh.WithEnterpriseURLs(params.BaseURL, params.BaseURL)
 		if err != nil {
-return Client{}, err
+			return Client{}, err
 		}
 		return Client{
 			Client: gh,
@@ -45,7 +45,7 @@ return Client{}, err
 }
 
 func newGitHub(ctx context.Context, token string) *github.Client {
-			return github.NewClient(newHTTP(ctx, token))
+	return github.NewClient(newHTTP(ctx, token))
 }
 
 func newHTTP(ctx context.Context, token string) *http.Client {
