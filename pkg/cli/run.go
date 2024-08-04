@@ -103,15 +103,11 @@ func (r *Runner) action(c *cli.Context) error {
 		return err
 	}
 	setLogLevel(params.LogLevel)
-	params.GitHubToken = getGitHubToken(params.GitHubToken)
-
-	ghParams := github.ParamsNew{
-		Token:      params.GitHubToken,
+	ghClient, err := github.New(c.Context, github.ParamsNew{
+		Token:      getGitHubToken(params.GitHubToken),
 		BaseURL:    params.GitHubAPIURL,
 		GraphQLURL: params.GitHubGraphQLURL,
-	}
-
-	ghClient, err := github.New(c.Context, ghParams)
+	})
 	if err != nil {
 		return fmt.Errorf("create a GitHub client: %w", err)
 	}
