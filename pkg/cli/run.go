@@ -44,6 +44,16 @@ func (r *Runner) runCommand() *cli.Command {
 				Usage: "GitHub Access Token [$GITHUB_TOKEN, $GITHUB_ACCESS_TOKEN]",
 			},
 			&cli.StringFlag{
+				Name:    "github-api-url",
+				Usage:   "GitHub API Base URL",
+				EnvVars: []string{"GITHUB_API_URL"},
+			},
+			&cli.StringFlag{
+				Name:    "github-graphql-url",
+				Usage:   "GitHub GraphQL API URL",
+				EnvVars: []string{"GITHUB_GRAPHQL_URL"},
+			},
+			&cli.StringFlag{
 				Name:  "prefix",
 				Usage: "The prefix of environment variable name",
 				Value: "CI_INFO_",
@@ -81,6 +91,8 @@ func (r *Runner) setCLIArg(c *cli.Context, params domain.Params) domain.Params {
 	if prNum := c.Int("pr"); prNum > 0 {
 		params.PRNum = prNum
 	}
+	params.GitHubAPIURL = c.String("github-api-url")
+	params.GitHubGraphQLURL = c.String("github-graphql-url")
 	return params
 }
 
@@ -91,11 +103,14 @@ func (r *Runner) action(c *cli.Context) error {
 		return err
 	}
 	setLogLevel(params.LogLevel)
-	params.GitHubToken = getGitHubToken(params.GitHubToken)
-
-	ghClient := github.New(c.Context, github.ParamsNew{
-		Token: params.GitHubToken,
+	ghClient, err := github.New(c.Context, github.ParamsNew{
+		Token:      getGitHubToken(params.GitHubToken),
+		BaseURL:    params.GitHubAPIURL,
+		GraphQLURL: params.GitHubGraphQLURL,
 	})
+	if err != nil {
+		return fmt.Errorf("create a GitHub client: %w", err)
+	}
 
 	fs := afero.NewOsFs()
 
