@@ -8,7 +8,7 @@ jobs:
     uses: suzuki-shunsuke/go-test-full-workflow/.github/workflows/test.yaml@cdb855906b55b11a56edc7268ab613cf36b3505c # v1.1.0
     with:
       aqua_version: v2.36.0
-      go-version: 1.23.1
+      go-version: 1.23.2
     secrets:
       gh_app_id: ${{secrets.APP_ID}}
       gh_app_private_key: ${{secrets.APP_PRIVATE_KEY}}
@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
         with:
-          go-version: "1.23.1"
+          go-version: "1.23.2"
           cache: true
       - run: go run ./cmd/ci-info run
         env:
