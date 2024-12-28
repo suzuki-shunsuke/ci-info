@@ -1,0 +1,14 @@
+---
+name: Check if all commits are signed
+on:
+  pull_request_target:
+    branches: [main]
+concurrency:
+  group: ${{ github.workflow }}--${{ github.head_ref }} # github.ref is unavailable in case of pull_request_target
+  cancel-in-progress: true
+jobs:
+  check-commit-signing:
+    uses: suzuki-shunsuke/check-commit-signing-workflow/.github/workflows/check.yaml@feat/first-pr
+    permissions:
+      contents: read
+      pull-requests: write
