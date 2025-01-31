@@ -32,4 +32,5 @@ func core() error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 	return runner.Run(ctx, os.Args...) //nolint:wrapcheck
+
 }
