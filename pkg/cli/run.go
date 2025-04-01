@@ -10,7 +10,7 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func (r *Runner) runCommand() *cli.Command {

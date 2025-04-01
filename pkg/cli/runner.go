@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 type LDFlags struct {
