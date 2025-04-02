@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -66,33 +67,33 @@ func (r *Runner) runCommand() *cli.Command {
 	}
 }
 
-func (r *Runner) setCLIArg(c context.Context, params domain.Params) domain.Params {
-	if owner := c.String("owner"); owner != "" {
+func (r *Runner) setCLIArg(cmd *cli.Command, params domain.Params) domain.Params {
+	if owner := cmd.String("owner"); owner != "" {
 		params.Owner = owner
 	}
-	if repo := c.String("repo"); repo != "" {
+	if repo := cmd.String("repo"); repo != "" {
 		params.Repo = repo
 	}
-	if token := c.String("github-token"); token != "" {
+	if token := cmd.String("github-token"); token != "" {
 		params.GitHubToken = token
 	}
-	if logLevel := c.String("log-level"); logLevel != "" {
+	if logLevel := cmd.String("log-level"); logLevel != "" {
 		params.LogLevel = logLevel
 	}
-	if prefix := c.String("prefix"); prefix != "" {
+	if prefix := cmd.String("prefix"); prefix != "" {
 		params.Prefix = prefix
 	}
-	if sha := c.String("sha"); sha != "" {
+	if sha := cmd.String("sha"); sha != "" {
 		params.SHA = sha
 	}
-	if dir := c.String("dir"); dir != "" {
+	if dir := cmd.String("dir"); dir != "" {
 		params.Dir = dir
 	}
-	if prNum := c.Int("pr"); prNum > 0 {
-		params.PRNum = prNum
+	if prNum := cmd.Int("pr"); prNum > 0 {
+		params.PRNum = int(prNum)
 	}
-	params.GitHubAPIURL = c.String("github-api-url")
-	params.GitHubGraphQLURL = c.String("github-graphql-url")
+	params.GitHubAPIURL = cmd.String("github-api-url")
+	params.GitHubGraphQLURL = cmd.String("github-graphql-url")
 	return params
 }
 
@@ -103,7 +104,7 @@ func (r *Runner) action(ctx context.Context, c *cli.Command) error {
 		return err
 	}
 	setLogLevel(params.LogLevel)
-	ghClient, err := github.New(c.Context, github.ParamsNew{
+	ghClient, err := github.New(ctx, github.ParamsNew{
 		Token:      getGitHubToken(params.GitHubToken),
 		BaseURL:    params.GitHubAPIURL,
 		GraphQLURL: params.GitHubGraphQLURL,
@@ -116,7 +117,7 @@ func (r *Runner) action(ctx context.Context, c *cli.Command) error {
 
 	ctrl := controller.New(ghClient, fs)
 
-	return ctrl.Run(c.Context, params) //nolint:wrapcheck
+	return ctrl.Run(ctx, params) //nolint:wrapcheck
 }
 
 func getGitHubToken(token string) string {
