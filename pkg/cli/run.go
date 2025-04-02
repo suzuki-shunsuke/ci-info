@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -10,7 +11,7 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
 	"github.com/suzuki-shunsuke/ci-info/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func (r *Runner) runCommand() *cli.Command {
@@ -46,12 +47,12 @@ func (r *Runner) runCommand() *cli.Command {
 			&cli.StringFlag{
 				Name:    "github-api-url",
 				Usage:   "GitHub API Base URL",
-				EnvVars: []string{"GITHUB_API_URL"},
+				Sources: cli.EnvVars("GITHUB_API_URL"),
 			},
 			&cli.StringFlag{
 				Name:    "github-graphql-url",
 				Usage:   "GitHub GraphQL API URL",
-				EnvVars: []string{"GITHUB_GRAPHQL_URL"},
+				Sources: cli.EnvVars("GITHUB_GRAPHQL_URL"),
 			},
 			&cli.StringFlag{
 				Name:  "prefix",
@@ -66,44 +67,44 @@ func (r *Runner) runCommand() *cli.Command {
 	}
 }
 
-func (r *Runner) setCLIArg(c *cli.Context, params domain.Params) domain.Params {
-	if owner := c.String("owner"); owner != "" {
+func (r *Runner) setCLIArg(cmd *cli.Command, params domain.Params) domain.Params {
+	if owner := cmd.String("owner"); owner != "" {
 		params.Owner = owner
 	}
-	if repo := c.String("repo"); repo != "" {
+	if repo := cmd.String("repo"); repo != "" {
 		params.Repo = repo
 	}
-	if token := c.String("github-token"); token != "" {
+	if token := cmd.String("github-token"); token != "" {
 		params.GitHubToken = token
 	}
-	if logLevel := c.String("log-level"); logLevel != "" {
+	if logLevel := cmd.String("log-level"); logLevel != "" {
 		params.LogLevel = logLevel
 	}
-	if prefix := c.String("prefix"); prefix != "" {
+	if prefix := cmd.String("prefix"); prefix != "" {
 		params.Prefix = prefix
 	}
-	if sha := c.String("sha"); sha != "" {
+	if sha := cmd.String("sha"); sha != "" {
 		params.SHA = sha
 	}
-	if dir := c.String("dir"); dir != "" {
+	if dir := cmd.String("dir"); dir != "" {
 		params.Dir = dir
 	}
-	if prNum := c.Int("pr"); prNum > 0 {
-		params.PRNum = prNum
+	if prNum := cmd.Int("pr"); prNum > 0 {
+		params.PRNum = int(prNum)
 	}
-	params.GitHubAPIURL = c.String("github-api-url")
-	params.GitHubGraphQLURL = c.String("github-graphql-url")
+	params.GitHubAPIURL = cmd.String("github-api-url")
+	params.GitHubGraphQLURL = cmd.String("github-graphql-url")
 	return params
 }
 
-func (r *Runner) action(c *cli.Context) error {
+func (r *Runner) action(ctx context.Context, c *cli.Command) error {
 	params := domain.Params{}
 	params = r.setCLIArg(c, params)
 	if err := setEnv(&params); err != nil {
 		return err
 	}
 	setLogLevel(params.LogLevel)
-	ghClient, err := github.New(c.Context, github.ParamsNew{
+	ghClient, err := github.New(ctx, github.ParamsNew{
 		Token:      getGitHubToken(params.GitHubToken),
 		BaseURL:    params.GitHubAPIURL,
 		GraphQLURL: params.GitHubGraphQLURL,
@@ -116,7 +117,7 @@ func (r *Runner) action(c *cli.Context) error {
 
 	ctrl := controller.New(ghClient, fs)
 
-	return ctrl.Run(c.Context, params) //nolint:wrapcheck
+	return ctrl.Run(ctx, params) //nolint:wrapcheck
 }
 
 func getGitHubToken(token string) string {
