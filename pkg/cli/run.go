@@ -46,12 +46,12 @@ func (r *Runner) runCommand() *cli.Command {
 			&cli.StringFlag{
 				Name:    "github-api-url",
 				Usage:   "GitHub API Base URL",
-				EnvVars: []string{"GITHUB_API_URL"},
+				Sources: cli.EnvVars("GITHUB_API_URL"),
 			},
 			&cli.StringFlag{
 				Name:    "github-graphql-url",
 				Usage:   "GitHub GraphQL API URL",
-				EnvVars: []string{"GITHUB_GRAPHQL_URL"},
+				Sources: cli.EnvVars("GITHUB_GRAPHQL_URL"),
 			},
 			&cli.StringFlag{
 				Name:  "prefix",
@@ -66,7 +66,7 @@ func (r *Runner) runCommand() *cli.Command {
 	}
 }
 
-func (r *Runner) setCLIArg(c *cli.Context, params domain.Params) domain.Params {
+func (r *Runner) setCLIArg(c context.Context, params domain.Params) domain.Params {
 	if owner := c.String("owner"); owner != "" {
 		params.Owner = owner
 	}
@@ -96,7 +96,7 @@ func (r *Runner) setCLIArg(c *cli.Context, params domain.Params) domain.Params {
 	return params
 }
 
-func (r *Runner) action(c *cli.Context) error {
+func (r *Runner) action(ctx context.Context, c *cli.Command) error {
 	params := domain.Params{}
 	params = r.setCLIArg(c, params)
 	if err := setEnv(&params); err != nil {

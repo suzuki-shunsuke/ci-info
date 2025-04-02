@@ -25,7 +25,7 @@ type Runner struct {
 }
 
 func (r *Runner) Run(ctx context.Context, args ...string) error {
-	app := cli.App{
+	app := cli.Command{
 		Name:    "ci-info",
 		Usage:   "get CI information. https://github.com/suzuki-shunsuke/ci-info",
 		Version: r.LDFlags.AppVersion(),
@@ -34,5 +34,5 @@ func (r *Runner) Run(ctx context.Context, args ...string) error {
 		},
 	}
 
-	return app.RunContext(ctx, args) //nolint:wrapcheck
+	return app.Run(ctx, args) //nolint:wrapcheck
 }
