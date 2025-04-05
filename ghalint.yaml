@@ -1,0 +1,4 @@
+excludes:
+  - policy_name: deny_inherit_secrets
+    workflow_file_path: .github/workflows/release.yaml
+    job_name: release
