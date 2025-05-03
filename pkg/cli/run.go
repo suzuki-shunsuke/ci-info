@@ -90,7 +90,7 @@ func (r *Runner) setCLIArg(cmd *cli.Command, params domain.Params) domain.Params
 		params.Dir = dir
 	}
 	if prNum := cmd.Int("pr"); prNum > 0 {
-		params.PRNum = int(prNum)
+		params.PRNum = prNum
 	}
 	params.GitHubAPIURL = cmd.String("github-api-url")
 	params.GitHubGraphQLURL = cmd.String("github-graphql-url")
