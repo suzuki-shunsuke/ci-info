@@ -8,7 +8,7 @@ require (
 	github.com/spf13/afero v1.14.0
 	github.com/suzuki-shunsuke/go-ci-env/v3 v3.1.0
 	github.com/urfave/cli/v3 v3.3.2
-	golang.org/x/oauth2 v0.29.0
+	golang.org/x/oauth2 v0.30.0
 )
 
 require (
