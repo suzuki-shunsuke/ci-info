@@ -30,7 +30,7 @@ We develop this tool to get some information in CI.
 You can install ci-info with [Homebrew](https://brew.sh/).
 
 ```console
-$ brew install suzuki-shunsuke/ci-info/ci-info
+$ brew install --cask suzuki-shunsuke/ci-info/ci-info
 ```
 
 ## aqua
