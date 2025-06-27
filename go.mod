@@ -3,7 +3,7 @@ module github.com/suzuki-shunsuke/ci-info
 go 1.24.2
 
 require (
-	github.com/google/go-github/v72 v72.0.0
+	github.com/google/go-github/v73 v73.0.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/afero v1.14.0
 	github.com/suzuki-shunsuke/go-ci-env/v3 v3.1.0
