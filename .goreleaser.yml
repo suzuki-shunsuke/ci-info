@@ -12,6 +12,12 @@ builds:
     goarch:
       - amd64
       - arm64
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    files:
+      - LICENSE
+      - README.md
+      - third_party_licenses/**/*
 release:
   # We update release page manually before releasing
   # So make prerelease true

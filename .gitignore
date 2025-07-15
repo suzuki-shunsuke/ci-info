@@ -3,3 +3,4 @@ dist/*
 bin/*
 .git-rm-branch.yml
 .envrc
+third_party_licenses
