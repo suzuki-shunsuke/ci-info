@@ -34,7 +34,7 @@ func New(ctx context.Context, params ParamsNew) (Client, error) {
 	if params.BaseURL != "" {
 		gh, err := gh.WithEnterpriseURLs(params.BaseURL, params.BaseURL)
 		if err != nil {
-			return Client{}, fmt.Errorf("configure GitHub API Baase URL: %w", err)
+			return Client{}, fmt.Errorf("configure GitHub API Base URL: %w", err)
 		}
 		return Client{
 			Client: gh,
