@@ -18,21 +18,17 @@ archives:
       - LICENSE
       - README.md
       - third_party_licenses/**/*
+sboms:
+  - id: default
+    disable: false
 release:
-  # We update release page manually before releasing
-  # So make prerelease true
   prerelease: "true"
   header: |
     [Pull Requests](https://github.com/suzuki-shunsuke/ci-info/pulls?q=is%3Apr+milestone%3A{{.Tag}}) | [Issues](https://github.com/suzuki-shunsuke/ci-info/issues?q=is%3Aissue+milestone%3A{{.Tag}}) | https://github.com/suzuki-shunsuke/ci-info/compare/{{.PreviousTag}}...{{.Tag}}
 homebrew_casks:
-  -
-    # NOTE: make sure the url_template, the token and given repo (github or gitlab) owner and name are from the
-    # same kind. We will probably unify this in the next major version like it is done with scoop.
-
-    repository:
+  - repository:
       owner: suzuki-shunsuke
       name: homebrew-ci-info
-    # The project name and current git tag are used in the format string.
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
     homepage: https://github.com/suzuki-shunsuke/ci-info
     description: Get CI related information
@@ -41,10 +37,6 @@ homebrew_casks:
     hooks:
       post:
         install: |
-          if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+          if OS.mac?
             system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/ci-info"]
           end
-
-sboms:
-  - id: default
-    disable: false
