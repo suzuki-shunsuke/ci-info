@@ -6,7 +6,7 @@ require (
 	github.com/google/go-github/v74 v74.0.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/afero v1.15.0
-	github.com/suzuki-shunsuke/go-ci-env/v3 v3.1.0
+	github.com/suzuki-shunsuke/go-ci-env/v3 v3.2.0
 	github.com/urfave/cli/v3 v3.4.1
 	golang.org/x/oauth2 v0.31.0
 )
