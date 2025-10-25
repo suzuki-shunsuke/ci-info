@@ -1,7 +1,6 @@
 # ci-info
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/suzuki-shunsuke/ci-info)](https://goreportcard.com/report/github.com/suzuki-shunsuke/ci-info)
-[![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/suzuki-shunsuke/ci-info/main/LICENSE)
+[![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/suzuki-shunsuke/ci-info/main/LICENSE) | [INSTALL](INSTALL.md)
 
 CLI tool to get CI related information.
 
@@ -17,129 +16,9 @@ We develop this tool to get some information in CI.
   - etc
 - etc
 
-## Install
-
-- [Homebrew](#homebrew)
-- [aqua](#aqua)
-- [GitHub Releases](#github-releases)
-
-### Homebrew
-
-You can install ci-info with [Homebrew](https://brew.sh/).
-
-```sh
-brew install --cask suzuki-shunsuke/ci-info/ci-info
-```
-
-## aqua
-
-You can install ci-info with [aqua](https://aquaproj.github.io/).
-
-```sh
-aqua g -i suzuki-shunsuke/ci-info
-```
-
-## GitHub Releases
-
-Please download a binary from the [release page](https://github.com/suzuki-shunsuke/ci-info/releases).
-
-<details>
-<summary>Verify downloaded binaries from GitHub Releases</summary>
-
-You can verify downloaded binaries using some tools.
-
-1. [Cosign](https://github.com/sigstore/cosign)
-1. [slsa-verifier](https://github.com/slsa-framework/slsa-verifier)
-1. [GitHub CLI](https://cli.github.com/)
-
-#### 1. Cosign
-
-You can install Cosign by aqua.
-
-```sh
-aqua g -i sigstore/cosign
-```
-
-```sh
-gh release download -R suzuki-shunsuke/ci-info v2.3.1
-cosign verify-blob \
-  --signature ci-info_2.3.1_checksums.txt.sig \
-  --certificate ci-info_2.3.1_checksums.txt.pem \
-  --certificate-identity-regexp 'https://github\.com/suzuki-shunsuke/go-release-workflow/\.github/workflows/release\.yaml@.*' \
-  --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-  ci-info_2.3.1_checksums.txt
-```
-
-Output:
-
-```
-Verified OK
-```
-
-After verifying the checksum, verify the artifact.
-
-```sh
-cat ci-info_2.3.1_checksums.txt | sha256sum -c --ignore-missing
-```
-
-#### 2. slsa-verifier
-
-You can install slsa-verifier by aqua.
-
-```sh
-aqua g -i slsa-framework/slsa-verifier
-```
-
-```sh
-gh release download -R suzuki-shunsuke/ci-info v2.3.1
-slsa-verifier verify-artifact ci-info_2.3.1_darwin_arm64.tar.gz \
-  --provenance-path multiple.intoto.jsonl \
-  --source-uri github.com/suzuki-shunsuke/ci-info \
-  --source-tag v2.3.1
-```
-
-Output:
-
-```
-Verified signature against tlog entry index 136878875 at URL: https://rekor.sigstore.dev/api/v1/log/entries/108e9186e8c5677a7ac053c11af84554df024d7c465abc4ae459493bd09be4875df26f45c1ffda32
-Verified build using builder "https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@refs/tags/v2.0.0" at commit 69950dff0ec546640c90cbcaf23df344d0b612cd
-Verifying artifact ci-info_2.3.1_darwin_arm64.tar.gz: PASSED
-```
-
-#### 3. GitHub CLI
-
-ci-info >= v2.3.1
-
-You can install GitHub CLI by aqua.
-
-```sh
-aqua g -i cli/cli
-```
-
-```sh
-gh release download -R suzuki-shunsuke/ci-info v2.3.1 -p ci-info_2.3.1_darwin_arm64.tar.gz
-gh attestation verify ci-info_2.3.1_darwin_arm64.tar.gz \
-  -R suzuki-shunsuke/ci-info \
-  --signer-workflow suzuki-shunsuke/go-release-workflow/.github/workflows/release.yaml
-```
-
-Output:
-
-```
-Loaded digest sha256:7fec0b88d213986b16605dd8e64f6230e4b4fc605a0ce4c2fd9698fdc40d3e2d for file://ci-info_2.3.1_darwin_arm64.tar.gz
-Loaded 1 attestation from GitHub API
-✓ Verification succeeded!
-
-sha256:7fec0b88d213986b16605dd8e64f6230e4b4fc605a0ce4c2fd9698fdc40d3e2d was attested by:
-REPO                                 PREDICATE_TYPE                  WORKFLOW
-suzuki-shunsuke/go-release-workflow  https://slsa.dev/provenance/v1  .github/workflows/release.yaml@7f97a226912ee2978126019b1e95311d7d15c97a
-```
-
-</details>
-
 ## Requirements
 
-GitHub Access Token is required to get the information about the Pull Request.
+GitHub Access Token with the pull requests read permission is required to get the information about the Pull Request.
 In the public repository, GitHub Access Token is optional.
 
 ## Getting Started
@@ -173,11 +52,11 @@ Some files are created.
 ls "$CI_INFO_TEMP_DIR"
 ```
 
-* pr_files.txt: The list of pull request file paths which include a maximum of 3000 files
-* pr_all_filenames.txt: The list of pull request file paths which include a maximum of 3000 files. In addition to `pr_files.txt`, the list of renamed file's `previous_filename` is included too.
-* pr_files.json: [The response body of GitHub API List pull requests files](https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#list-pull-requests-files)
-* pr.json: [The response body of GitHub API Get a pull request](https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#get-a-pull-request)
-* labels.txt: The list of pull request label names
+- pr_files.txt: The list of pull request file paths which include a maximum of 3000 files
+- pr_all_filenames.txt: The list of pull request file paths which include a maximum of 3000 files. In addition to `pr_files.txt`, the list of renamed file's `previous_filename` is included too.
+- pr_files.json: [The response body of GitHub API List pull requests files](https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#list-pull-requests-files)
+- pr.json: [The response body of GitHub API Get a pull request](https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#get-a-pull-request)
+- labels.txt: The list of pull request label names
 
 Note that the created directory and files aren't removed automatically.
 
