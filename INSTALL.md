@@ -88,7 +88,7 @@ aqua g -i sigstore/cosign
 ```
 
 From ci-info v2.4.1, bundle files are available.
-Cosign v3 is required.
+Cosign v2.4.2 or later is required.
 
 ```sh
 version=v2.4.1
@@ -107,7 +107,7 @@ cosign verify-blob \
 cat "$checksum_file" | sha256sum -c --ignore-missing -
 ```
 
-In case of ci-info v2.4.0 or older, *.pem and *.sig are available.
+For ci-info v2.4.0 or older and Cosign v2.4.1 or older, *.pem and *.sig are also available.
 
 ```sh
 version=v2.4.0
