@@ -106,31 +106,6 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/int128/ghcp/v1.15.0/ghcp_darwin_amd64.zip",
-      "checksum": "BBFC2198A03E72724D8D4A69290C63EE795A7272C94E23CDDB723A389B49E03E",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/int128/ghcp/v1.15.0/ghcp_darwin_arm64.zip",
-      "checksum": "9C5098814639EC85BCE76283980B6E8CBDA9CFBA334C360F542F993800D0C507",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/int128/ghcp/v1.15.0/ghcp_linux_amd64.zip",
-      "checksum": "7793962CE99E3CE153A691565D6904743995D922F8D452427C5EC066BD71E0D0",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/int128/ghcp/v1.15.0/ghcp_linux_arm64.zip",
-      "checksum": "BF2D2B54A848A1C10AA751D52F7FA5AF3E147A459514522C5A0A1FA8A43457CE",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/int128/ghcp/v1.15.0/ghcp_windows_amd64.zip",
-      "checksum": "F6E3A8296EC17CDB3092660DFCA3781D53644E0D05B5706A9B00076C11FB6CEC",
-      "algorithm": "sha256"
-    },
-    {
       "id": "github_release/github.com/reviewdog/reviewdog/v0.21.0/reviewdog_0.21.0_Darwin_arm64.tar.gz",
       "checksum": "C28DEF83AF6C5AA8728D6D18160546AFD3E5A219117715A2C6C023BD16F14D10",
       "algorithm": "sha256"
@@ -158,31 +133,6 @@
     {
       "id": "github_release/github.com/reviewdog/reviewdog/v0.21.0/reviewdog_0.21.0_Windows_x86_64.tar.gz",
       "checksum": "97C733E492DEC1FD83B9342C25A384D5AB6EBFA72B6978346E9A436CAD1853F6",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-darwin-amd64",
-      "checksum": "0FC2B6F16B900ABDFDA3153B11FC435A8CBE3830E8E820FE8AD5FE4149A5B472",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-darwin-arm64",
-      "checksum": "3823B044DE184DA21E300BC5E20DD29D3FA9243AF3BA70C4A5DA1712F3385D46",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-linux-amd64",
-      "checksum": "46DBDCB5467A3DFEC2526923D0B3365E40C8D9DC00EC23D5ACA3437449E8CBFD",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-linux-arm64",
-      "checksum": "17FD784737CA54D7D8A343C82DA6C5D6DBDEE971E66644D923D1B057FB97D7ED",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/sigstore/cosign/v3.0.2/cosign-windows-amd64.exe",
-      "checksum": "7A137280D8686665CEB4D8565DF2A0AC63F28031E014CDCAE5D56891A6C8A400",
       "algorithm": "sha256"
     },
     {
