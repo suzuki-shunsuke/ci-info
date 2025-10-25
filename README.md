@@ -9,34 +9,34 @@ CLI tool to get CI related information.
 
 We develop this tool to get some information in CI.
 
-* Related Pull Request
-  * PR Author
-  * Pull Request Files
-  * Labels
-  * base and head branch
-  * etc
-* etc
+- Related Pull Request
+  - PR Author
+  - Pull Request Files
+  - Labels
+  - base and head branch
+  - etc
+- etc
 
 ## Install
 
-* [Homebrew](#homebrew)
-* [aqua](#aqua)
-* [GitHub Releases](#github-releases)
+- [Homebrew](#homebrew)
+- [aqua](#aqua)
+- [GitHub Releases](#github-releases)
 
 ### Homebrew
 
 You can install ci-info with [Homebrew](https://brew.sh/).
 
-```console
-$ brew install --cask suzuki-shunsuke/ci-info/ci-info
+```sh
+brew install --cask suzuki-shunsuke/ci-info/ci-info
 ```
 
 ## aqua
 
 You can install ci-info with [aqua](https://aquaproj.github.io/).
 
-```console
-$ aqua g -i suzuki-shunsuke/ci-info
+```sh
+aqua g -i suzuki-shunsuke/ci-info
 ```
 
 ## GitHub Releases
@@ -163,14 +163,14 @@ export CI_INFO_TEMP_DIR=/var/folders/w0/kzjzgvd52wg5s4jy5h0lcyqh0000gn/T/ci-info
 Then the shell script to export the environment variables are outputted and some files are created.
 You can export them by `eval`.
 
-```
-$ eval "$(ci-info run --owner suzuki-shunsuke --repo github-comment --pr 132)"
+```sh
+eval "$(ci-info run --owner suzuki-shunsuke --repo github-comment --pr 132)"
 ```
 
 Some files are created.
 
-```
-$ ls "$CI_INFO_TEMP_DIR"
+```sh
+ls "$CI_INFO_TEMP_DIR"
 ```
 
 * pr_files.txt: The list of pull request file paths which include a maximum of 3000 files
