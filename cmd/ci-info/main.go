@@ -6,7 +6,7 @@ import (
 	"os/signal"
 
 	"github.com/sirupsen/logrus"
-	"github.com/suzuki-shunsuke/ci-info/pkg/cli"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/cli"
 )
 
 var (

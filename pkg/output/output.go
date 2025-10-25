@@ -3,8 +3,8 @@ package output
 import (
 	"fmt"
 
-	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
-	"github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 )
 
 func NonPREnv(params domain.Params) string {

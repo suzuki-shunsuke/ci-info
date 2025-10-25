@@ -7,9 +7,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/afero"
-	"github.com/suzuki-shunsuke/ci-info/pkg/controller"
-	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
-	"github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/controller"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
 	"github.com/urfave/cli/v3"
 )
