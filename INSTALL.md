@@ -87,6 +87,28 @@ You can install Cosign by aqua.
 aqua g -i sigstore/cosign
 ```
 
+From ci-info v2.4.1, bundle files are available.
+Cosign v2.4.2 or later is required.
+
+```sh
+version=v2.4.1
+checksum_file="ci-info_${version#v}_checksums.txt"
+asset=ci-info_${version#v}_darwin_arm64.tar.gz
+gh release download "$version" \
+  -R suzuki-shunsuke/ci-info \
+  -p "$asset" \
+  -p "$checksum_file" \
+  -p "${checksum_file}.bundle"
+cosign verify-blob \
+  "$checksum_file" \
+  --bundle "${checksum_file}.bundle" \
+  --certificate-identity-regexp 'https://github\.com/suzuki-shunsuke/go-release-workflow/\.github/workflows/release\.yaml@.*' \
+  --certificate-oidc-issuer "https://token.actions.githubusercontent.com"
+cat "$checksum_file" | sha256sum -c --ignore-missing -
+```
+
+For ci-info v2.4.0 or older and Cosign v2.4.1 or older, *.pem and *.sig are also available.
+
 ```sh
 version=v2.4.0
 checksum_file="ci-info_${version#v}_checksums.txt"
