@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/sirupsen/logrus"
-	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
 )
 
 func (c *Client) getPRNum(ctx context.Context, params domain.Params) (int, error) {

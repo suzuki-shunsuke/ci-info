@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/spf13/afero"
-	"github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 )
 
 func Write(fs afero.Fs, dir string, pr *github.PullRequest, files []*github.CommitFile) error {
