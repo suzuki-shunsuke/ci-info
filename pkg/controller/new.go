@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/spf13/afero"
-	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
-	"github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 )
 
 type GitHub interface {

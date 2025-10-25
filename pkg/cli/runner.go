@@ -27,7 +27,7 @@ type Runner struct {
 func (r *Runner) Run(ctx context.Context, args ...string) error {
 	cmd := cli.Command{
 		Name:    "ci-info",
-		Usage:   "get CI information. https://github.com/suzuki-shunsuke/ci-info",
+		Usage:   "get CI information. https://github.com/suzuki-shunsuke/ci-info/v2",
 		Version: r.LDFlags.AppVersion(),
 		Commands: []*cli.Command{
 			r.runCommand(),

@@ -3,7 +3,7 @@ package write
 import (
 	"testing"
 
-	"github.com/suzuki-shunsuke/ci-info/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 )
 
 func strP(i string) *string {

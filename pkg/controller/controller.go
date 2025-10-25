@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/suzuki-shunsuke/ci-info/pkg/domain"
-	"github.com/suzuki-shunsuke/ci-info/pkg/github"
-	"github.com/suzuki-shunsuke/ci-info/pkg/output"
-	"github.com/suzuki-shunsuke/ci-info/pkg/write"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/output"
+	"github.com/suzuki-shunsuke/ci-info/v2/pkg/write"
 )
 
 func (c *Controller) Run(ctx context.Context, params domain.Params) error {

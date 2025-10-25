@@ -1,4 +1,4 @@
-module github.com/suzuki-shunsuke/ci-info
+module github.com/suzuki-shunsuke/ci-info/v2
 
 go 1.25.3
 
