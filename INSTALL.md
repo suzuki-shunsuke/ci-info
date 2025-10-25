@@ -54,7 +54,7 @@ aqua g -i cli/cli
 
 ```sh
 version=v2.4.0
-asset=ci-info_darwin_arm64.tar.gz
+asset=ci-info_${version#v}_darwin_arm64.tar.gz
 gh release download -R suzuki-shunsuke/ci-info "$version" -p "$asset"
 gh attestation verify "$asset" \
   -R suzuki-shunsuke/ci-info \
@@ -71,7 +71,7 @@ aqua g -i slsa-framework/slsa-verifier
 
 ```sh
 version=v2.4.0
-asset=ci-info_darwin_arm64.tar.gz
+asset=ci-info_${version#v}_darwin_arm64.tar.gz
 gh release download -R suzuki-shunsuke/ci-info "$version" -p "$asset" -p multiple.intoto.jsonl
 slsa-verifier verify-artifact "$asset" \
   --provenance-path multiple.intoto.jsonl \
@@ -89,8 +89,8 @@ aqua g -i sigstore/cosign
 
 ```sh
 version=v2.4.0
-checksum_file="ci-info_2.4.0_checksums.txt"
-asset=ci-info_darwin_arm64.tar.gz
+checksum_file="ci-info_${version#v}_checksums.txt"
+asset=ci-info_${version#v}_darwin_arm64.tar.gz
 gh release download "$version" \
   -R suzuki-shunsuke/ci-info \
   -p "$asset" \
