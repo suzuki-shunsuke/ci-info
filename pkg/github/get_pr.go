@@ -3,20 +3,16 @@ package github
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
-	"github.com/sirupsen/logrus"
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
 )
 
-func (c *Client) getPRNum(ctx context.Context, params domain.Params) (int, error) {
+func (c *Client) getPRNum(ctx context.Context, logger *slog.Logger, params domain.Params) (int, error) {
 	if params.PRNum > 0 {
 		return params.PRNum, nil
 	}
-	logrus.WithFields(logrus.Fields{
-		"owner": params.Owner,
-		"repo":  params.Repo,
-		"sha":   params.SHA,
-	}).Debug("get pull request from SHA")
+	logger.Debug("get pull request from SHA", "owner", params.Owner, "repo", params.Repo, "sha", params.SHA)
 	prs, _, err := c.ListPRsWithCommit(ctx, paramsListPRsWithCommit{
 		Owner: params.Owner,
 		Repo:  params.Repo,
@@ -25,17 +21,15 @@ func (c *Client) getPRNum(ctx context.Context, params domain.Params) (int, error
 	if err != nil {
 		return 0, fmt.Errorf("list pull requests with a commit: %w", err)
 	}
-	logrus.WithFields(logrus.Fields{
-		"size": len(prs),
-	}).Debug("the number of pull requests assosicated with the commit")
+	logger.Debug("the number of pull requests assosicated with the commit", "size", len(prs))
 	if len(prs) == 0 {
 		return 0, nil
 	}
 	return prs[0].GetNumber(), nil
 }
 
-func (c *Client) GetPR(ctx context.Context, params domain.Params) (*PullRequest, error) {
-	prNum, err := c.getPRNum(ctx, params)
+func (c *Client) GetPR(ctx context.Context, logger *slog.Logger, params domain.Params) (*PullRequest, error) {
+	prNum, err := c.getPRNum(ctx, logger, params)
 	if err != nil {
 		return nil, err
 	}

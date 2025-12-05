@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"io"
+	"log/slog"
 
 	"github.com/urfave/cli/v3"
 )
@@ -18,19 +19,20 @@ func (flags *LDFlags) AppVersion() string {
 }
 
 type Runner struct {
-	Stdin   io.Reader
-	Stdout  io.Writer
-	Stderr  io.Writer
-	LDFlags *LDFlags
+	Stdin       io.Reader
+	Stdout      io.Writer
+	Stderr      io.Writer
+	LDFlags     *LDFlags
+	LogLevelVar *slog.LevelVar
 }
 
-func (r *Runner) Run(ctx context.Context, args ...string) error {
+func (r *Runner) Run(ctx context.Context, logger *slog.Logger, args ...string) error {
 	cmd := cli.Command{
 		Name:    "ci-info",
 		Usage:   "get CI information. https://github.com/suzuki-shunsuke/ci-info/v2",
 		Version: r.LDFlags.AppVersion(),
 		Commands: []*cli.Command{
-			r.runCommand(),
+			r.runCommand(logger),
 		},
 	}
 
