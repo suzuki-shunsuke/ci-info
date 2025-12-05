@@ -3,10 +3,10 @@ package github
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 
 	"github.com/google/go-github/v76/github"
-	"github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
 )
 
@@ -79,10 +79,10 @@ type paramsListPRsWithCommit struct {
 
 const maxPerPage = 100
 
-func (c *Client) GetPRFiles(ctx context.Context, params ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error) {
+func (c *Client) GetPRFiles(ctx context.Context, logger *slog.Logger, params ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error) {
 	ret := []*github.CommitFile{}
 	if params.FileSize == 0 {
-		logrus.Debug("file size is 0")
+		logger.Debug("file size is 0")
 		return nil, nil, nil
 	}
 	n := (params.FileSize / maxPerPage) + 1

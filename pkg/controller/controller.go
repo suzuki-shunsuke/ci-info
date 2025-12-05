@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
@@ -11,14 +12,14 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/write"
 )
 
-func (c *Controller) Run(ctx context.Context, params domain.Params) error {
+func (c *Controller) Run(ctx context.Context, logger *slog.Logger, params domain.Params) error { //nolint:revive
 	if err := validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
 
 	isPR := params.PRNum > 0
 
-	pr, err := c.gh.GetPR(ctx, params)
+	pr, err := c.gh.GetPR(ctx, logger, params)
 	if err != nil {
 		return fmt.Errorf("get an associated pull request: %w", err)
 	}
@@ -28,7 +29,7 @@ func (c *Controller) Run(ctx context.Context, params domain.Params) error {
 		return nil
 	}
 
-	files, _, err := c.gh.GetPRFiles(ctx, github.ParamsGetPRFiles{
+	files, _, err := c.gh.GetPRFiles(ctx, logger, github.ParamsGetPRFiles{
 		Owner:    params.Owner,
 		Repo:     params.Repo,
 		PRNum:    pr.GetNumber(),

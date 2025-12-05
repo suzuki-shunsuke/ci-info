@@ -3,6 +3,7 @@ package controller
 import (
 	"context"
 	"io"
+	"log/slog"
 	"os"
 
 	"github.com/spf13/afero"
@@ -11,8 +12,8 @@ import (
 )
 
 type GitHub interface {
-	GetPR(ctx context.Context, params domain.Params) (*github.PullRequest, error)
-	GetPRFiles(ctx context.Context, params github.ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error)
+	GetPR(ctx context.Context, logger *slog.Logger, params domain.Params) (*github.PullRequest, error)
+	GetPRFiles(ctx context.Context, logger *slog.Logger, params github.ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error)
 }
 
 type Controller struct {

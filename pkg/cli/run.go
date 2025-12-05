@@ -3,22 +3,25 @@ package cli
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/afero"
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/controller"
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
+	"github.com/suzuki-shunsuke/slog-util/slogutil"
 	"github.com/urfave/cli/v3"
 )
 
-func (r *Runner) runCommand() *cli.Command {
+func (r *Runner) runCommand(logger *slog.Logger) *cli.Command {
 	return &cli.Command{
-		Name:   "run",
-		Usage:  "get CI information",
-		Action: r.action,
+		Name:  "run",
+		Usage: "get CI information",
+		Action: func(ctx context.Context, c *cli.Command) error {
+			return r.action(ctx, logger, c)
+		},
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "owner",
@@ -97,13 +100,15 @@ func (r *Runner) setCLIArg(cmd *cli.Command, params domain.Params) domain.Params
 	return params
 }
 
-func (r *Runner) action(ctx context.Context, c *cli.Command) error {
+func (r *Runner) action(ctx context.Context, logger *slog.Logger, c *cli.Command) error {
 	params := domain.Params{}
 	params = r.setCLIArg(c, params)
 	if err := setEnv(&params); err != nil {
 		return err
 	}
-	setLogLevel(params.LogLevel)
+	if err := slogutil.SetLevel(r.LogLevelVar, params.LogLevel); err != nil {
+		return fmt.Errorf("set log level: %w", err)
+	}
 	ghClient, err := github.New(ctx, github.ParamsNew{
 		Token:      getGitHubToken(params.GitHubToken),
 		BaseURL:    params.GitHubAPIURL,
@@ -117,7 +122,7 @@ func (r *Runner) action(ctx context.Context, c *cli.Command) error {
 
 	ctrl := controller.New(ghClient, fs)
 
-	return ctrl.Run(ctx, params) //nolint:wrapcheck
+	return ctrl.Run(ctx, logger, params) //nolint:wrapcheck
 }
 
 func getGitHubToken(token string) string {
@@ -128,19 +133,6 @@ func getGitHubToken(token string) string {
 		return token
 	}
 	return os.Getenv("GITHUB_ACCESS_TOKEN")
-}
-
-func setLogLevel(logLevel string) {
-	if logLevel == "" {
-		return
-	}
-	lvl, err := logrus.ParseLevel(logLevel)
-	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"log_level": logLevel,
-		}).WithError(err).Error("the log level is invalid")
-	}
-	logrus.SetLevel(lvl)
 }
 
 func setEnv(params *domain.Params) error {
