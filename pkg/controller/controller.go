@@ -12,7 +12,7 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/write"
 )
 
-func (c *Controller) Run(ctx context.Context, logger *slog.Logger, params domain.Params) error { //nolint:revive
+func (c *Controller) Run(ctx context.Context, logger *slog.Logger, params domain.Params) error {
 	if err := validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
