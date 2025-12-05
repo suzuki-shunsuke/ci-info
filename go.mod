@@ -1,6 +1,6 @@
 module github.com/suzuki-shunsuke/ci-info/v2
 
-go 1.25.4
+go 1.25.5
 
 require (
 	github.com/google/go-github/v76 v76.0.0
