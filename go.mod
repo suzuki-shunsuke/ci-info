@@ -7,7 +7,7 @@ require (
 	github.com/spf13/afero v1.15.0
 	github.com/suzuki-shunsuke/go-ci-env/v3 v3.3.0
 	github.com/suzuki-shunsuke/slog-error v0.2.1
-	github.com/suzuki-shunsuke/slog-util v0.2.2
+	github.com/suzuki-shunsuke/slog-util v0.3.0
 	github.com/urfave/cli/v3 v3.6.1
 	golang.org/x/oauth2 v0.33.0
 )
