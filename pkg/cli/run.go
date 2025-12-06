@@ -3,7 +3,6 @@ package cli
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"os"
 
 	"github.com/spf13/afero"
@@ -12,16 +11,15 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
 	"github.com/suzuki-shunsuke/slog-util/slogutil"
+	"github.com/suzuki-shunsuke/urfave-cli-v3-util/urfave"
 	"github.com/urfave/cli/v3"
 )
 
-func (r *Runner) runCommand(logger *slog.Logger) *cli.Command {
+func (r *Runner) runCommand(logger *slogutil.Logger) *cli.Command {
 	return &cli.Command{
-		Name:  "run",
-		Usage: "get CI information",
-		Action: func(ctx context.Context, c *cli.Command) error {
-			return r.action(ctx, logger, c)
-		},
+		Name:   "run",
+		Usage:  "get CI information",
+		Action: urfave.Action(r.action, logger),
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "owner",
@@ -100,13 +98,13 @@ func (r *Runner) setCLIArg(cmd *cli.Command, params domain.Params) domain.Params
 	return params
 }
 
-func (r *Runner) action(ctx context.Context, logger *slog.Logger, c *cli.Command) error {
+func (r *Runner) action(ctx context.Context, c *cli.Command, logger *slogutil.Logger) error {
 	params := domain.Params{}
 	params = r.setCLIArg(c, params)
 	if err := setEnv(&params); err != nil {
 		return err
 	}
-	if err := slogutil.SetLevel(r.LogLevelVar, params.LogLevel); err != nil {
+	if err := logger.SetLevel(params.LogLevel); err != nil {
 		return fmt.Errorf("set log level: %w", err)
 	}
 	ghClient, err := github.New(ctx, github.ParamsNew{
@@ -122,7 +120,7 @@ func (r *Runner) action(ctx context.Context, logger *slog.Logger, c *cli.Command
 
 	ctrl := controller.New(ghClient, fs)
 
-	return ctrl.Run(ctx, logger, params) //nolint:wrapcheck
+	return ctrl.Run(ctx, logger.Logger, params) //nolint:wrapcheck
 }
 
 func getGitHubToken(token string) string {
