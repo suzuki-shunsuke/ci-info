@@ -2,39 +2,22 @@ package cli
 
 import (
 	"context"
-	"io"
-	"log/slog"
 
+	"github.com/suzuki-shunsuke/slog-util/slogutil"
+	"github.com/suzuki-shunsuke/urfave-cli-v3-util/urfave"
 	"github.com/urfave/cli/v3"
 )
 
-type LDFlags struct {
-	Version string
-	Commit  string
-	Date    string
-}
-
-func (flags *LDFlags) AppVersion() string {
-	return flags.Version + " (" + flags.Commit + ")"
-}
-
-type Runner struct {
-	Stdin       io.Reader
-	Stdout      io.Writer
-	Stderr      io.Writer
-	LDFlags     *LDFlags
-	LogLevelVar *slog.LevelVar
-}
-
-func (r *Runner) Run(ctx context.Context, logger *slog.Logger, args ...string) error {
-	cmd := cli.Command{
-		Name:    "ci-info",
-		Usage:   "get CI information. https://github.com/suzuki-shunsuke/ci-info/v2",
-		Version: r.LDFlags.AppVersion(),
+func Run(ctx context.Context, logger *slogutil.Logger, env *urfave.Env) error {
+	r := &Runner{}
+	return urfave.Command(env, &cli.Command{ //nolint:wrapcheck
+		Name:  "ci-info",
+		Usage: "get CI information. https://github.com/suzuki-shunsuke/ci-info",
+		Flags: []cli.Flag{},
 		Commands: []*cli.Command{
 			r.runCommand(logger),
 		},
-	}
-
-	return cmd.Run(ctx, args) //nolint:wrapcheck
+	}).Run(ctx, env.Args)
 }
+
+type Runner struct{}
