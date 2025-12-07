@@ -3,7 +3,7 @@ module github.com/suzuki-shunsuke/ci-info/v2
 go 1.25.5
 
 require (
-	github.com/google/go-github/v79 v79.0.0
+	github.com/google/go-github/v80 v80.0.0
 	github.com/spf13/afero v1.15.0
 	github.com/suzuki-shunsuke/go-ci-env/v3 v3.3.0
 	github.com/suzuki-shunsuke/slog-util v0.3.0
