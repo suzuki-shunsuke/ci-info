@@ -14,7 +14,7 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-func (r *Runner) runCommand(logger *slogutil.Logger) *cli.Command {
+func (r *Runner) runCommand(logger *slogutil.Logger) *cli.Command { //nolint:funlen
 	params := &domain.Params{}
 	return &cli.Command{
 		Name:  "run",
