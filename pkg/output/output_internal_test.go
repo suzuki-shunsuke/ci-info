@@ -14,7 +14,7 @@ func Test_nonPREnv(t *testing.T) {
 		Owner:  "suzuki-shunsuke",
 		Repo:   "foo",
 	}
-	s := NonPREnv(params)
+	s := NonPREnv(&params)
 	exp := `export CI_INFO_HAS_ASSOCIATED_PR=false
 export CI_INFO_IS_PR=false
 export CI_INFO_REPO_OWNER=suzuki-shunsuke

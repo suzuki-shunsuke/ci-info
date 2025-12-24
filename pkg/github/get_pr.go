@@ -14,7 +14,7 @@ import (
 
 var errNoPRFound = errors.New("no associated pull request found")
 
-func (c *Client) getPRNum(ctx context.Context, logger *slog.Logger, params domain.Params) (int, error) {
+func (c *Client) getPRNum(ctx context.Context, logger *slog.Logger, params *domain.Params) (int, error) {
 	if params.PRNum > 0 {
 		return params.PRNum, nil
 	}
@@ -51,7 +51,7 @@ func (c *Client) getPRNum(ctx context.Context, logger *slog.Logger, params domai
 	return prs[0].GetNumber(), nil
 }
 
-func (c *Client) GetPR(ctx context.Context, logger *slog.Logger, params domain.Params) (*PullRequest, error) {
+func (c *Client) GetPR(ctx context.Context, logger *slog.Logger, params *domain.Params) (*PullRequest, error) {
 	prNum, err := c.getPRNum(ctx, logger, params)
 	if err != nil {
 		return nil, err

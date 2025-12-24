@@ -7,7 +7,7 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 )
 
-func NonPREnv(params domain.Params) string {
+func NonPREnv(params *domain.Params) string {
 	return fmt.Sprintf(`export %sHAS_ASSOCIATED_PR=false
 export %sIS_PR=false
 export %sREPO_OWNER=%s

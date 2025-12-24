@@ -11,97 +11,77 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 	"github.com/suzuki-shunsuke/go-ci-env/v3/cienv"
 	"github.com/suzuki-shunsuke/slog-util/slogutil"
-	"github.com/suzuki-shunsuke/urfave-cli-v3-util/urfave"
 	"github.com/urfave/cli/v3"
 )
 
-func (r *Runner) runCommand(logger *slogutil.Logger) *cli.Command {
+func (r *Runner) runCommand(logger *slogutil.Logger) *cli.Command { //nolint:funlen
+	params := &domain.Params{}
 	return &cli.Command{
-		Name:   "run",
-		Usage:  "get CI information",
-		Action: urfave.Action(r.action, logger),
+		Name:  "run",
+		Usage: "get CI information",
+		Action: func(ctx context.Context, _ *cli.Command) error {
+			return r.action(ctx, logger, params)
+		},
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:  "owner",
-				Usage: "repository owner",
+				Name:        "owner",
+				Usage:       "repository owner",
+				Destination: &params.Owner,
 			},
 			&cli.StringFlag{
-				Name:  "repo",
-				Usage: "repository name",
+				Name:        "repo",
+				Usage:       "repository name",
+				Destination: &params.Repo,
 			},
 			&cli.StringFlag{
-				Name:  "sha",
-				Usage: "commit SHA",
+				Name:        "sha",
+				Usage:       "commit SHA",
+				Destination: &params.SHA,
 			},
 			&cli.StringFlag{
-				Name:  "dir",
-				Usage: "directory path where files are created. The directory is created by os.MkdirAll if it doesn't exist. By default the directory is created at Go's ioutil.TempDir",
+				Name:        "dir",
+				Usage:       "directory path where files are created. The directory is created by os.MkdirAll if it doesn't exist. By default the directory is created at Go's ioutil.TempDir",
+				Destination: &params.Dir,
 			},
 			&cli.IntFlag{
-				Name:  "pr",
-				Usage: "pull request number",
+				Name:        "pr",
+				Usage:       "pull request number",
+				Destination: &params.PRNum,
 			},
 			&cli.StringFlag{
-				Name:  "github-token",
-				Usage: "GitHub Access Token [$GITHUB_TOKEN, $GITHUB_ACCESS_TOKEN]",
+				Name:        "github-token",
+				Usage:       "GitHub Access Token [$GITHUB_TOKEN, $GITHUB_ACCESS_TOKEN]",
+				Destination: &params.GitHubToken,
 			},
 			&cli.StringFlag{
-				Name:    "github-api-url",
-				Usage:   "GitHub API Base URL",
-				Sources: cli.EnvVars("GITHUB_API_URL"),
+				Name:        "github-api-url",
+				Usage:       "GitHub API Base URL",
+				Sources:     cli.EnvVars("GITHUB_API_URL"),
+				Destination: &params.GitHubAPIURL,
 			},
 			&cli.StringFlag{
-				Name:    "github-graphql-url",
-				Usage:   "GitHub GraphQL API URL",
-				Sources: cli.EnvVars("GITHUB_GRAPHQL_URL"),
+				Name:        "github-graphql-url",
+				Usage:       "GitHub GraphQL API URL",
+				Sources:     cli.EnvVars("GITHUB_GRAPHQL_URL"),
+				Destination: &params.GitHubGraphQLURL,
 			},
 			&cli.StringFlag{
-				Name:  "prefix",
-				Usage: "The prefix of environment variable name",
-				Value: "CI_INFO_",
+				Name:        "prefix",
+				Usage:       "The prefix of environment variable name",
+				Value:       "CI_INFO_",
+				Destination: &params.Prefix,
 			},
 			&cli.StringFlag{
-				Name:  "log-level",
-				Usage: "log level",
+				Name:        "log-level",
+				Usage:       "log level",
+				Destination: &params.LogLevel,
 			},
 		},
 	}
 }
 
-func (r *Runner) setCLIArg(cmd *cli.Command, params domain.Params) domain.Params {
-	if owner := cmd.String("owner"); owner != "" {
-		params.Owner = owner
-	}
-	if repo := cmd.String("repo"); repo != "" {
-		params.Repo = repo
-	}
-	if token := cmd.String("github-token"); token != "" {
-		params.GitHubToken = token
-	}
-	if logLevel := cmd.String("log-level"); logLevel != "" {
-		params.LogLevel = logLevel
-	}
-	if prefix := cmd.String("prefix"); prefix != "" {
-		params.Prefix = prefix
-	}
-	if sha := cmd.String("sha"); sha != "" {
-		params.SHA = sha
-	}
-	if dir := cmd.String("dir"); dir != "" {
-		params.Dir = dir
-	}
-	if prNum := cmd.Int("pr"); prNum > 0 {
-		params.PRNum = prNum
-	}
-	params.GitHubAPIURL = cmd.String("github-api-url")
-	params.GitHubGraphQLURL = cmd.String("github-graphql-url")
-	return params
-}
-
-func (r *Runner) action(ctx context.Context, c *cli.Command, logger *slogutil.Logger) error {
-	params := domain.Params{}
-	params = r.setCLIArg(c, params)
-	if err := setEnv(&params); err != nil {
+func (r *Runner) action(ctx context.Context, logger *slogutil.Logger, params *domain.Params) error {
+	if err := setEnv(params); err != nil {
 		return err
 	}
 	if err := logger.SetLevel(params.LogLevel); err != nil {

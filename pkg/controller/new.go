@@ -12,7 +12,7 @@ import (
 )
 
 type GitHub interface {
-	GetPR(ctx context.Context, logger *slog.Logger, params domain.Params) (*github.PullRequest, error)
+	GetPR(ctx context.Context, logger *slog.Logger, params *domain.Params) (*github.PullRequest, error)
 	GetPRFiles(ctx context.Context, logger *slog.Logger, params github.ParamsGetPRFiles) ([]*github.CommitFile, *github.Response, error)
 }
 
