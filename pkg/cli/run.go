@@ -120,7 +120,27 @@ func (r *Runner) action(ctx context.Context, c *cli.Command, logger *slogutil.Lo
 
 	ctrl := controller.New(ghClient, fs)
 
-	return ctrl.Run(ctx, logger.Logger, params) //nolint:wrapcheck
+	l := logger.Logger
+	if params.Owner != "" {
+		l = l.With("owner", params.Owner)
+	}
+	if params.Repo != "" {
+		l = l.With("repo", params.Repo)
+	}
+	if params.Prefix != "" {
+		l = l.With("prefix", params.Prefix)
+	}
+	if params.SHA != "" {
+		l = l.With("sha", params.SHA)
+	}
+	if params.Dir != "" {
+		l = l.With("dir", params.Dir)
+	}
+	if params.PRNum > 0 {
+		l = l.With("pr", params.PRNum)
+	}
+
+	return ctrl.Run(ctx, l, params) //nolint:wrapcheck
 }
 
 func getGitHubToken(token string) string {
