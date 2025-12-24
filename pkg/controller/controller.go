@@ -23,6 +23,9 @@ func (c *Controller) Run(ctx context.Context, logger *slog.Logger, params domain
 	if err != nil {
 		return fmt.Errorf("get an associated pull request: %w", err)
 	}
+	if params.PRNum == 0 && pr != nil {
+		logger = logger.With("pr", pr.GetNumber())
+	}
 
 	if pr == nil {
 		fmt.Fprintln(c.stdout, output.NonPREnv(params))
