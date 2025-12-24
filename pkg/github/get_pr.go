@@ -45,7 +45,7 @@ func (c *Client) getPRNum(ctx context.Context, logger *slog.Logger, params domai
 		backoff.WithMaxElapsedTime(40*time.Second),
 	)
 	if err != nil {
-		return 0, err
+		return 0, err //nolint:wrapcheck
 	}
 	logger.Debug("the number of pull requests assosicated with the commit", "size", len(prs))
 	return prs[0].GetNumber(), nil

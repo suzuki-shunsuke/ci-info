@@ -3,7 +3,6 @@ package cli
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"os"
 
 	"github.com/spf13/afero"
@@ -69,14 +68,12 @@ func (r *Runner) runCommand(logger *slogutil.Logger) *cli.Command {
 	}
 }
 
-func (r *Runner) setCLIArg(logger *slog.Logger, cmd *cli.Command, params domain.Params) domain.Params {
+func (r *Runner) setCLIArg(cmd *cli.Command, params domain.Params) domain.Params {
 	if owner := cmd.String("owner"); owner != "" {
 		params.Owner = owner
-		logger = logger.With("owner", owner)
 	}
 	if repo := cmd.String("repo"); repo != "" {
 		params.Repo = repo
-		logger = logger.With("repo", repo)
 	}
 	if token := cmd.String("github-token"); token != "" {
 		params.GitHubToken = token
@@ -86,19 +83,15 @@ func (r *Runner) setCLIArg(logger *slog.Logger, cmd *cli.Command, params domain.
 	}
 	if prefix := cmd.String("prefix"); prefix != "" {
 		params.Prefix = prefix
-		logger = logger.With("prefix", prefix)
 	}
 	if sha := cmd.String("sha"); sha != "" {
 		params.SHA = sha
-		logger = logger.With("sha", sha)
 	}
 	if dir := cmd.String("dir"); dir != "" {
 		params.Dir = dir
-		logger = logger.With("dir", dir)
 	}
 	if prNum := cmd.Int("pr"); prNum > 0 {
 		params.PRNum = prNum
-		logger = logger.With("pr", prNum)
 	}
 	params.GitHubAPIURL = cmd.String("github-api-url")
 	params.GitHubGraphQLURL = cmd.String("github-graphql-url")
@@ -107,8 +100,8 @@ func (r *Runner) setCLIArg(logger *slog.Logger, cmd *cli.Command, params domain.
 
 func (r *Runner) action(ctx context.Context, c *cli.Command, logger *slogutil.Logger) error {
 	params := domain.Params{}
-	params = r.setCLIArg(logger.Logger, c, params)
-	if err := setEnv(logger.Logger, &params); err != nil {
+	params = r.setCLIArg(c, params)
+	if err := setEnv(&params); err != nil {
 		return err
 	}
 	if err := logger.SetLevel(params.LogLevel); err != nil {
@@ -160,22 +153,19 @@ func getGitHubToken(token string) string {
 	return os.Getenv("GITHUB_ACCESS_TOKEN")
 }
 
-func setEnv(logger *slog.Logger, params *domain.Params) error {
+func setEnv(params *domain.Params) error {
 	platform := cienv.Get(nil)
 	if platform == nil {
 		return nil
 	}
 	if params.Owner == "" {
 		params.Owner = platform.RepoOwner()
-		logger = logger.With("owner", params.Owner)
 	}
 	if params.Repo == "" {
 		params.Repo = platform.RepoName()
-		logger = logger.With("repo", params.Repo)
 	}
 	if params.SHA == "" {
 		params.SHA = platform.SHA()
-		logger = logger.With("sha", params.SHA)
 	}
 	if params.PRNum <= 0 {
 		prNum, err := platform.PRNumber()
@@ -183,7 +173,6 @@ func setEnv(logger *slog.Logger, params *domain.Params) error {
 			return fmt.Errorf("get the pull request number: %w", err)
 		}
 		params.PRNum = prNum
-		logger = logger.With("pr", params.PRNum)
 	}
 	return nil
 }
