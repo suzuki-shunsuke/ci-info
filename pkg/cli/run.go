@@ -80,7 +80,6 @@ func (r *Runner) runCommand(logger *slogutil.Logger) *cli.Command {
 	}
 }
 
-
 func (r *Runner) action(ctx context.Context, logger *slogutil.Logger, params *domain.Params) error {
 	if err := setEnv(params); err != nil {
 		return err
