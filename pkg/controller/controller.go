@@ -12,7 +12,7 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/write"
 )
 
-func (c *Controller) Run(ctx context.Context, logger *slog.Logger, params domain.Params) error {
+func (c *Controller) Run(ctx context.Context, logger *slog.Logger, params *domain.Params) error {
 	if err := validateParams(params); err != nil {
 		return fmt.Errorf("argument is invalid: %w", err)
 	}
@@ -61,7 +61,7 @@ var (
 	errSHAOrPRNumRequired = errors.New("sha or pr number is required")
 )
 
-func validateParams(params domain.Params) error {
+func validateParams(params *domain.Params) error {
 	if params.Owner == "" {
 		return errOwnerRequired
 	}
