@@ -1,6 +1,6 @@
 {
   "name": "test",
-  "image": "debian:bookworm-20240423@sha256:1aadfee8d292f64b045adb830f8a58bfacc15789ae5f489a0fedcd517a862cb9",
+  "image": "debian:bookworm-20260316@sha256:bc960ef50e6feed90686c593361df158517556ed1d2d98e5d1df3724024e0f49",
   "features": {
     "ghcr.io/aquaproj/devcontainer-features/aqua-installer:0.1.6": {
       "aqua_version": "v2.57.1"
