@@ -3,7 +3,7 @@
   "image": "debian:bookworm-20260421@sha256:8a8cd02c5912770b4980228a54d4aff9e4f986f1eb2525d2d371dec5232cefcc",
   "features": {
     "ghcr.io/aquaproj/devcontainer-features/aqua-installer:0.1.6": {
-      "aqua_version": "v2.57.1"
+      "aqua_version": "v2.57.2"
     }
   },
   "remoteEnv": {
