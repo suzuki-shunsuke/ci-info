@@ -6,10 +6,6 @@ import (
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/github"
 )
 
-func strP(i string) *string {
-	return &i
-}
-
 func Test_labelsTxt(t *testing.T) {
 	t.Parallel()
 	if labelsTxt(nil) != "" {
@@ -17,10 +13,10 @@ func Test_labelsTxt(t *testing.T) {
 	}
 	s := labelsTxt([]*github.Label{
 		{
-			Name: strP("bug"),
+			Name: new("bug"),
 		},
 		{
-			Name: strP("foo"),
+			Name: new("foo"),
 		},
 	})
 	exp := `bug
