@@ -24,31 +24,19 @@ export CI_INFO_REPO_NAME=foo`
 	}
 }
 
-func intP(i int) *int {
-	return &i
-}
-
-func strP(i string) *string {
-	return &i
-}
-
-func boolP(i bool) *bool {
-	return &i
-}
-
 func Test_prEnv(t *testing.T) {
 	t.Parallel()
 	s := PREnv("CI_INFO_", "/tmp/ci-info_yoo", false, "suzuki-shunsuke", "foo", &github.PullRequest{
-		Number: intP(10),
-		Merged: boolP(true),
+		Number: new(10),
+		Merged: new(true),
 		Base: &github.PullRequestBranch{
-			Ref: strP("dev"),
+			Ref: new("dev"),
 		},
 		Head: &github.PullRequestBranch{
-			Ref: strP("feature-branch"),
+			Ref: new("feature-branch"),
 		},
 		User: &github.User{
-			Login: strP("octocat"),
+			Login: new("octocat"),
 		},
 	})
 	exp := `export CI_INFO_IS_PR=false
