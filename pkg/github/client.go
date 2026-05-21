@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/google/go-github/v86/github"
+	"github.com/google/go-github/v87/github"
 	"golang.org/x/oauth2"
 )
 
@@ -30,23 +30,17 @@ type ParamsNew struct {
 }
 
 func New(ctx context.Context, params ParamsNew) (Client, error) {
-	gh := newGitHub(ctx, params.Token)
+	opts := []github.ClientOptionsFunc{github.WithHTTPClient(newHTTP(ctx, params.Token))}
 	if params.BaseURL != "" {
-		gh, err := gh.WithEnterpriseURLs(params.BaseURL, params.BaseURL)
-		if err != nil {
-			return Client{}, fmt.Errorf("configure GitHub API Base URL: %w", err)
-		}
-		return Client{
-			Client: gh,
-		}, nil
+		opts = append(opts, github.WithEnterpriseURLs(params.BaseURL, params.BaseURL))
+	}
+	gh, err := github.NewClient(opts...)
+	if err != nil {
+		return Client{}, fmt.Errorf("create a GitHub client: %w", err)
 	}
 	return Client{
 		Client: gh,
 	}, nil
-}
-
-func newGitHub(ctx context.Context, token string) *github.Client {
-	return github.NewClient(newHTTP(ctx, token))
 }
 
 func newHTTP(ctx context.Context, token string) *http.Client {
