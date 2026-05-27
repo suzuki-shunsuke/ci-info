@@ -3,7 +3,7 @@
   "image": "debian:trixie-20260518@sha256:4ae67669760b807c19f23902a3fd7c121a6a70cf2ae709035674b23e712e4d62",
   "features": {
     "ghcr.io/aquaproj/devcontainer-features/aqua-installer:0.1.6": {
-      "aqua_version": "v2.59.0"
+      "aqua_version": "v2.59.1"
     }
   },
   "remoteEnv": {
