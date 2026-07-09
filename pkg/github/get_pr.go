@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v5"
-	"github.com/google/go-github/v88/github"
+	"github.com/google/go-github/v89/github"
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
 )
 
