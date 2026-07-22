@@ -7,7 +7,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/cenkalti/backoff/v5"
+	"github.com/cenkalti/backoff/v7"
 	"github.com/google/go-github/v89/github"
 	"github.com/suzuki-shunsuke/ci-info/v2/pkg/domain"
 )
