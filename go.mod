@@ -4,7 +4,7 @@ go 1.26.5
 
 require (
 	github.com/cenkalti/backoff/v7 v7.0.0
-	github.com/google/go-github/v89 v89.0.0
+	github.com/google/go-github/v90 v90.0.0
 	github.com/spf13/afero v1.15.0
 	github.com/suzuki-shunsuke/go-ci-env/v3 v3.3.0
 	github.com/suzuki-shunsuke/slog-util v0.3.2
