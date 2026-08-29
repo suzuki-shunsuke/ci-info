@@ -13,10 +13,10 @@ func Test_labelsTxt(t *testing.T) {
 	}
 	s := labelsTxt([]*github.Label{
 		{
-			Name: new("bug"),
+			Name: "bug",
 		},
 		{
-			Name: new("foo"),
+			Name: "foo",
 		},
 	})
 	exp := `bug
