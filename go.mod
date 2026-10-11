@@ -1,6 +1,6 @@
 module github.com/suzuki-shunsuke/ci-info/v2
 
-go 1.27.1
+go 1.27.2
 
 require (
 	github.com/cenkalti/backoff/v7 v7.0.1
