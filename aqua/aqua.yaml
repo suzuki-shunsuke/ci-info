@@ -4,4 +4,7 @@
 registries:
   - type: standard
     ref: v4.576.0 # renovate: depName=aquaproj/aqua-registry
-import_dir: aqua
+checksum:
+  enabled: true
+  require_checksum: true
+import_dir: imports
