@@ -41,8 +41,9 @@ Please unarchive it and install a pre built binary into `$PATH`.
 You can verify downloaded assets using some tools.
 
 1. [GitHub CLI](https://cli.github.com/)
-1. [slsa-verifier](https://github.com/slsa-framework/slsa-verifier)
 1. [Cosign](https://github.com/sigstore/cosign)
+1. [Packslip](https://packslip.dev/) `ci-info >= v2.4.4`
+1. [slsa-verifier](https://github.com/slsa-framework/slsa-verifier) `ci-info <= v2.4.3`
 
 ### 1. GitHub CLI
 
@@ -61,25 +62,7 @@ gh attestation verify "$asset" \
   --signer-workflow suzuki-shunsuke/go-release-workflow/.github/workflows/release.yaml
 ```
 
-### 2. slsa-verifier
-
-You can install slsa-verifier by aqua.
-
-```sh
-aqua g -i slsa-framework/slsa-verifier
-```
-
-```sh
-version=v2.4.0
-asset=ci-info_${version#v}_darwin_arm64.tar.gz
-gh release download -R suzuki-shunsuke/ci-info "$version" -p "$asset" -p multiple.intoto.jsonl
-slsa-verifier verify-artifact "$asset" \
-  --provenance-path multiple.intoto.jsonl \
-  --source-uri github.com/suzuki-shunsuke/ci-info \
-  --source-tag "$version"
-```
-
-### 3. Cosign
+### 2. Cosign
 
 You can install Cosign by aqua.
 
@@ -126,4 +109,44 @@ cosign verify-blob \
   --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
   "$checksum_file"
 cat "$checksum_file" | sha256sum -c --ignore-missing -
+```
+
+### 3. Packslip
+
+`ci-info >= v2.4.4`
+
+You can install packslip by aqua.
+
+```sh
+aqua g -i jdx/packslip
+```
+
+```sh
+version=v2.4.4
+asset=ci-info_${version#v}_darwin_arm64.tar.gz
+gh release download -R suzuki-shunsuke/ci-info "$version" -p "$asset" -p packslip.sigstore.json
+packslip verify packslip.sigstore.json \
+    --artifact "$asset"
+```
+
+
+### 4. slsa-verifier
+
+> [!WARNING]
+> As of ci-info v2.4.4, `multiple.intoto.jsonl` hasn't been published anymore.
+
+You can install slsa-verifier by aqua.
+
+```sh
+aqua g -i slsa-framework/slsa-verifier
+```
+
+```sh
+version=v2.4.0
+asset=ci-info_${version#v}_darwin_arm64.tar.gz
+gh release download -R suzuki-shunsuke/ci-info "$version" -p "$asset" -p multiple.intoto.jsonl
+slsa-verifier verify-artifact "$asset" \
+  --provenance-path multiple.intoto.jsonl \
+  --source-uri github.com/suzuki-shunsuke/ci-info \
+  --source-tag "$version"
 ```
