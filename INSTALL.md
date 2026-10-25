@@ -126,9 +126,16 @@ version=v2.4.4
 asset=ci-info_${version#v}_darwin_arm64.tar.gz
 gh release download -R suzuki-shunsuke/ci-info "$version" -p "$asset" -p packslip.sigstore.json
 packslip verify packslip.sigstore.json \
+    --pin ps1_qrkqt6zznf7zeaowztnaqt67te \
+    --identity-prefix https://github.com/suzuki-shunsuke/go-release-workflow/.github/workflows/release.yaml@ \
     --artifact "$asset"
 ```
 
+- `--pin` requires the release to be signed from the repository `suzuki-shunsuke/ci-info`, identified by its repository ID rather than its name
+- `--identity-prefix` requires the release to be signed by the release workflow of [suzuki-shunsuke/go-release-workflow](https://github.com/suzuki-shunsuke/go-release-workflow)
+
+On success, packslip prints a line starting with `ok:`.
+Please make sure it shows the project and version you meant, e.g. `github.com/suzuki-shunsuke/ci-info 2.4.4`.
 
 ### 4. slsa-verifier
 
