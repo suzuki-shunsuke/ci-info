@@ -3,7 +3,7 @@ module github.com/suzuki-shunsuke/ci-info/v2
 go 1.27.3
 
 require (
-	github.com/cenkalti/backoff/v7 v7.0.1
+	github.com/cenkalti/backoff/v7 v7.0.2
 	github.com/google/go-github/v93 v93.0.0
 	github.com/spf13/afero v1.15.0
 	github.com/suzuki-shunsuke/go-ci-env/v3 v3.3.0
